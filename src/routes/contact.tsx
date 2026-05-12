@@ -39,9 +39,9 @@ function ContactPage() {
             Whether you're a driver, a shop owner, or a partner — we'd love to hear from you.
           </p>
           <div className="mt-8 space-y-4 text-sm">
-            <div className="flex items-center gap-3 text-foreground"><Mail className="h-4 w-4 text-primary" /> hello@carcareally.com</div>
-            <div className="flex items-center gap-3 text-foreground"><Phone className="h-4 w-4 text-primary" /> 1-800-CCA-CARS</div>
-            <div className="flex items-center gap-3 text-foreground"><MapPin className="h-4 w-4 text-primary" /> United States — all 50 states</div>
+            <a href="mailto:hello@carcareally.com" className="flex items-center gap-3 text-foreground hover:text-primary"><Mail className="h-4 w-4 text-primary" /><span>hello@carcareally.com</span></a>
+            <a href="tel:+13026400060" className="flex items-center gap-3 text-foreground hover:text-primary"><Phone className="h-4 w-4 text-primary" /><span>1-302-640-0060</span></a>
+            <div className="flex items-center gap-3 text-foreground"><MapPin className="h-4 w-4 text-primary" /><span>United States — all 50 states</span></div>
           </div>
         </div>
 

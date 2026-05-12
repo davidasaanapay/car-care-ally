@@ -1,10 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
+import { VehicleSelect, type VehicleSelection } from "@/components/VehicleSelect";
 import {
-  Sparkles, ShieldCheck, Calendar, Wrench, Car, Cpu, FileText,
-  Search, MapPin, ArrowRight, Star, Gauge, Bell,
+  Sparkles, ShieldCheck, Calendar, Wrench, Cpu, FileText,
+  MapPin, ArrowRight, Star, Gauge, Bell,
 } from "lucide-react";
 import heroImg from "@/images/hero.jpg";
 
@@ -52,7 +54,7 @@ function Hero() {
           </div>
           <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.05] text-balance">
             Simply smarter <br />
-            <span className="bg-hero-gradient bg-clip-text text-transparent">car service.</span>
+            <span className="text-primary">car service.</span>
           </h1>
           <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
             Diagnose issues with AI in 60 seconds, get a transparent estimate, and book an
@@ -97,48 +99,50 @@ function Hero() {
 }
 
 function FindByVehicle() {
+  const nav = useNavigate();
+  const [vehicle, setVehicle] = useState<VehicleSelection>({ year: "", make: "", model: "" });
+  const [zip, setZip] = useState("");
+  const ready = vehicle.year && vehicle.make && vehicle.model;
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    nav({ to: "/shops", search: { zip, year: vehicle.year, make: vehicle.make, model: vehicle.model } as never });
+  };
+
   return (
     <section className="container mx-auto px-4 -mt-8 relative z-10">
-      <div className="rounded-2xl bg-card border border-border shadow-card p-6 md:p-8">
+      <form onSubmit={onSubmit} className="rounded-2xl bg-card border border-border shadow-card p-6 md:p-8">
         <div className="flex flex-wrap items-center gap-4 justify-between mb-5">
           <div>
             <h2 className="text-xl font-semibold text-foreground">Find service for your vehicle</h2>
-            <p className="text-sm text-muted-foreground">Search by vehicle, plate, or VIN — we'll surface the right shops near you.</p>
+            <p className="text-sm text-muted-foreground">Pick your vehicle and ZIP — we'll surface the right shops near you.</p>
           </div>
-          <Button asChild variant="ghost" size="sm">
+          <Button asChild variant="ghost" size="sm" type="button">
             <Link to="/diagnostics">
               Skip, run AI diagnostics <ArrowRight className="ml-1 h-3.5 w-3.5" />
             </Link>
           </Button>
         </div>
-        <div className="grid md:grid-cols-4 gap-3">
-          <SearchField icon={<Car className="h-4 w-4" />} label="Year / Make / Model" placeholder="2021 Toyota Camry" />
-          <SearchField icon={<FileText className="h-4 w-4" />} label="License plate" placeholder="ABC-1234" />
-          <SearchField icon={<Search className="h-4 w-4" />} label="VIN" placeholder="1HGBH41JXMN109186" />
-          <SearchField icon={<MapPin className="h-4 w-4" />} label="ZIP code" placeholder="10001" />
+        <div className="grid md:grid-cols-[1fr_180px_auto] gap-3 items-end">
+          <VehicleSelect value={vehicle} onChange={setVehicle} />
+          <label className="block">
+            <span className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">ZIP code</span>
+            <div className="mt-1 flex items-center gap-2 rounded-md border border-input bg-background px-3 h-10 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <input
+                inputMode="numeric"
+                maxLength={5}
+                value={zip}
+                onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
+                className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
+                placeholder="10001"
+              />
+            </div>
+          </label>
+          <Button type="submit" disabled={!ready} className="h-10">Find shops</Button>
         </div>
-        <div className="mt-4 flex justify-end">
-          <Button asChild>
-            <Link to="/shops">Find shops near me</Link>
-          </Button>
-        </div>
-      </div>
+      </form>
     </section>
-  );
-}
-
-function SearchField({ icon, label, placeholder }: { icon: React.ReactNode; label: string; placeholder: string }) {
-  return (
-    <label className="block">
-      <span className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">{label}</span>
-      <div className="mt-1 flex items-center gap-2 rounded-lg border border-input bg-background px-3 py-2.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition">
-        <span className="text-muted-foreground">{icon}</span>
-        <input
-          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
-          placeholder={placeholder}
-        />
-      </div>
-    </label>
   );
 }
 

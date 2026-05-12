@@ -156,7 +156,7 @@ function KeysAdmin() {
       <div className="rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-5 mb-6">
         <p className="text-sm text-foreground">
           <strong>Security:</strong> Provider secrets are stored encrypted on the server (.env / Lovable Cloud secrets).
-          They are never sent to the browser and never stored in the database. Use the Lovable backend secrets panel to add or rotate keys for Stripe, Resend, Tekmetric, etc.
+          They are never sent to the browser and never stored in the database. Use the Lovable backend secrets panel to add or rotate API keys for payments, email, parts pricing, and other integrations.
         </p>
       </div>
       <div className="space-y-2">

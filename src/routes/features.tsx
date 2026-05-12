@@ -19,27 +19,27 @@ const groups = [
   {
     title: "For Drivers",
     items: [
-      { icon: Cpu, name: "AI Diagnostics", desc: "Vehicle picker → symptom drilldown → visual indicators → AI assessment with price range." },
-      { icon: Car, name: "My Garage", desc: "Add unlimited vehicles, track service history, get tag-renewal and maintenance reminders." },
-      { icon: MessageSquare, name: "AI Chatbot", desc: "Ask anything about your vehicle. Backed by a knowledge base synced for every US region." },
-      { icon: FileText, name: "Live Invoices", desc: "See every action your specialist takes — like a Walmart receipt for your engine." },
+      { icon: Cpu, name: "AI Diagnostics", desc: "Describe symptoms, get a likely cause and price range in seconds." },
+      { icon: Car, name: "My Garage", desc: "Track every vehicle, service history, and renewal reminder in one place." },
+      { icon: MessageSquare, name: "AI Chatbot", desc: "Ask anything about your vehicle, anytime." },
+      { icon: FileText, name: "Live Invoices", desc: "See every action your specialist takes — line by line." },
     ],
   },
   {
     title: "For Shops",
     items: [
-      { icon: Calendar, name: "Appointment Engine", desc: "Tekmetric-grade scheduling, reimagined. Drag, drop, dispatch in seconds." },
-      { icon: BarChart3, name: "Smart Estimates", desc: "Pull part costs from Tekmetric or other open APIs, with AI fallback for unknown jobs." },
-      { icon: Store, name: "Built-in Marketplace", desc: "Sell parts and accessories on your own storefront. Pay a small % only on items sold." },
-      { icon: CreditCard, name: "Bring Your Own Stripe", desc: "Connect your business Stripe to accept Apple Pay, Google Pay, Cards, and Cash App." },
+      { icon: Calendar, name: "Appointment Engine", desc: "Modern scheduling. Drag, drop, dispatch." },
+      { icon: BarChart3, name: "Smart Estimates", desc: "Real-time part pricing with AI fallback for unknown jobs." },
+      { icon: Store, name: "Built-in Marketplace", desc: "Sell parts on your own storefront. Pay only on items sold." },
+      { icon: CreditCard, name: "Bring Your Own Stripe", desc: "Connect your business Stripe to accept Apple Pay, Google Pay, cards, and Cash App." },
     ],
   },
   {
     title: "For Everyone",
     items: [
-      { icon: ShieldCheck, name: "Vetted Network", desc: "Every shop and independent specialist is verified by the Car Care Ally team." },
-      { icon: Bell, name: "Smart Notifications", desc: "Email + in-app updates for appointment status, completion, and follow-up service." },
-      { icon: Map, name: "All 50 States", desc: "Coverage broken down by state, surfacing local accredited partners." },
+      { icon: ShieldCheck, name: "Vetted Network", desc: "Every shop and specialist is verified by Car Care Ally." },
+      { icon: Bell, name: "Smart Notifications", desc: "Email and in-app updates for every status change." },
+      { icon: Map, name: "All 50 States", desc: "Local accredited partners, nationwide coverage." },
       { icon: Wrench, name: "Specialist Profiles", desc: "Browse certifications, specialties, and reviews before you book." },
     ],
   },
