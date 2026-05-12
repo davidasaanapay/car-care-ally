@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { Cpu, Calendar, Car, FileText } from "lucide-react";
+import { Cpu, Calendar, Car, FileText, MessageSquare } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Car Care Ally" }] }),
@@ -13,6 +13,7 @@ function Dashboard() {
   const name = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "there";
   const tiles = [
     { to: "/diagnostics", icon: Cpu, title: "Run AI Diagnostics", desc: "Identify a vehicle issue in 60 seconds." },
+    { to: "/chat", icon: MessageSquare, title: "Chat with CCA Ally", desc: "Ask anything — symptoms, maintenance, prices." },
     { to: "/book", icon: Calendar, title: "Book a Service", desc: "Schedule with an accredited shop." },
     { to: "/vehicles", icon: Car, title: "My Garage", desc: "Manage your vehicles & reminders." },
     { to: "/invoices", icon: FileText, title: "Invoices", desc: "Review work and pay securely." },

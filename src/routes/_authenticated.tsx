@@ -2,14 +2,14 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { PageShell } from "@/components/PageShell";
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, Car, Calendar, FileText, User, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Car, Calendar, FileText, User, ShieldCheck, MessagesSquare, Store } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
   component: AuthLayout,
 });
 
 function AuthLayout() {
-  const { user, loading, isSuperAdmin } = useAuth();
+  const { user, loading, isSuperAdmin, isShopOwner } = useAuth();
   const loc = useLocation();
 
   if (loading) {
@@ -30,8 +30,10 @@ function AuthLayout() {
     { to: "/vehicles", label: "My Garage", icon: Car },
     { to: "/appointments", label: "Appointments", icon: Calendar },
     { to: "/invoices", label: "Invoices", icon: FileText },
+    { to: "/chat", label: "AI Assistant", icon: MessagesSquare },
     { to: "/profile", label: "Profile", icon: User },
   ];
+  if (isShopOwner) links.push({ to: "/shop", label: "Shop Dashboard", icon: Store });
   if (isSuperAdmin) links.push({ to: "/admin", label: "Admin", icon: ShieldCheck });
 
   return (
