@@ -53,7 +53,7 @@ const tiers = [
     desc: "For growing shops and multi-bay operations.",
     features: [
       "Everything in Starter",
-      "Tekmetric & open-API parts integrations",
+      "Open-API parts and pricing integrations",
       "Custom marketplace fee structure",
       "Featured placement in shop directory",
       "Specialist team management",
