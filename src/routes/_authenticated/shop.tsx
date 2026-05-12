@@ -76,7 +76,7 @@ function ShopDashboard() {
             ))}
           </div>
         )}
-        {tab === "appointments" && <ApptsList appts={appts} onUpdate={async (id, status) => {
+        {tab === "appointments" && <ApptsList appts={appts} onUpdate={async (id: string, status: string) => {
           const { error } = await supabase.from("appointments").update({ status }).eq("id", id);
           if (error) toast.error(error.message); else { toast.success("Updated"); setAppts((a) => a.map((x) => x.id === id ? { ...x, status } : x)); }
         }} />}
