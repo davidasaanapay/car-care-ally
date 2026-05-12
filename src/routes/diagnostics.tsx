@@ -2,9 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Cpu, ArrowRight, ArrowLeft, Sparkles, AlertTriangle } from "lucide-react";
+import { Cpu, ArrowRight, ArrowLeft, Sparkles, AlertTriangle, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { VehicleSelect, type VehicleSelection } from "@/components/VehicleSelect";
 
 export const Route = createFileRoute("/diagnostics")({
   head: () => ({
@@ -35,12 +36,11 @@ const symptomMap: Record<string, string[]> = {
   electrical: ["Won't start", "Battery light", "Dim headlights", "Random electronics failing"],
   transmission: ["Slipping gears", "Hard shifting", "Fluid leak", "Whining noise"],
   service: ["Oil change due", "Tire rotation", "Inspection", "Fluid top-up"],
-  other: ["Describe in notes"],
 };
 
 function DiagnosticsPage() {
   const [step, setStep] = useState(0);
-  const [vehicle, setVehicle] = useState({ year: "", make: "", model: "" });
+  const [vehicle, setVehicle] = useState<VehicleSelection>({ year: "", make: "", model: "" });
   const [category, setCategory] = useState<string>("");
   const [symptoms, setSymptoms] = useState<string[]>([]);
   const [errorCode, setErrorCode] = useState("");
@@ -51,6 +51,16 @@ function DiagnosticsPage() {
   const toggleSymptom = (s: string) =>
     setSymptoms((cur) => cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]);
 
+  const categoryLabel = issueCategories.find((c) => c.id === category)?.label ?? "";
+  const hasSymptomList = category && category !== "other" && (symptomMap[category]?.length ?? 0) > 0;
+
+  const goAfterCategory = (id: string) => {
+    setCategory(id);
+    setSymptoms([]);
+    // Skip step 2 entirely for "other" — no symptom list
+    setStep(id === "other" ? 3 : 2);
+  };
+
   const runAI = async () => {
     setLoading(true);
     try {
@@ -60,12 +70,11 @@ function DiagnosticsPage() {
       if (error) throw error;
       setResult(data);
       setStep(4);
-    } catch (e: any) {
-      // Fallback heuristic if AI is not yet configured
+    } catch {
       const baseLow = category === "brakes" ? 180 : category === "ac" ? 220 : category === "engine" ? 300 : 80;
       const baseHigh = baseLow * 2.4;
       setResult({
-        assessment: `Based on the symptoms you described for your ${vehicle.year} ${vehicle.make} ${vehicle.model}, the most likely cause involves the ${category} system. We recommend an in-shop inspection by a Car Care Ally certified specialist to confirm.`,
+        assessment: `Based on what you described for your ${vehicle.year} ${vehicle.make} ${vehicle.model}, the most likely cause involves the ${categoryLabel || category} system. We recommend an in-shop inspection by a Car Care Ally certified specialist to confirm.`,
         low: baseLow,
         high: Math.round(baseHigh),
         action: "Book an appointment with an accredited shop to confirm the diagnosis.",
@@ -85,26 +94,32 @@ function DiagnosticsPage() {
         </div>
         <h1 className="mt-2 font-display text-4xl md:text-5xl font-bold text-foreground">Let's figure out what's wrong.</h1>
 
-        {/* progress */}
         <div className="mt-8 flex gap-1.5">
           {[0,1,2,3,4].map((i) => (
             <div key={i} className={`h-1 flex-1 rounded-full ${step >= i ? "bg-primary" : "bg-border"}`} />
           ))}
         </div>
 
-        <div className="mt-8 rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card">
+        {/* Selected-so-far summary */}
+        {(vehicle.year || category || symptoms.length > 0 || errorCode || notes) && step < 4 && (
+          <div className="mt-4 flex flex-wrap gap-2 text-xs">
+            {vehicle.year && vehicle.make && vehicle.model && (
+              <Chip onEdit={() => setStep(0)}>{vehicle.year} {vehicle.make} {vehicle.model}</Chip>
+            )}
+            {category && <Chip onEdit={() => setStep(1)}>{categoryLabel}</Chip>}
+            {symptoms.map((s) => (
+              <Chip key={s} onEdit={() => setStep(2)}>{s}</Chip>
+            ))}
+            {errorCode && <Chip onEdit={() => setStep(3)}>Code: {errorCode}</Chip>}
+          </div>
+        )}
+
+        <div className="mt-6 rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card">
           {step === 0 && (
             <div>
               <h2 className="font-display text-xl font-bold text-foreground">Tell us about your vehicle</h2>
-              <div className="mt-4 grid sm:grid-cols-3 gap-3">
-                {(["year","make","model"] as const).map((k) => (
-                  <label key={k} className="block">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{k}</span>
-                    <input value={vehicle[k]} onChange={(e) => setVehicle({ ...vehicle, [k]: e.target.value })}
-                      placeholder={k === "year" ? "2021" : k === "make" ? "Toyota" : "Camry"}
-                      className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
-                  </label>
-                ))}
+              <div className="mt-4">
+                <VehicleSelect value={vehicle} onChange={setVehicle} />
               </div>
               <NextRow onNext={() => setStep(1)} disabled={!vehicle.year || !vehicle.make || !vehicle.model} />
             </div>
@@ -115,7 +130,7 @@ function DiagnosticsPage() {
               <h2 className="font-display text-xl font-bold text-foreground">What category best describes the issue?</h2>
               <div className="mt-4 grid sm:grid-cols-2 gap-2">
                 {issueCategories.map((c) => (
-                  <button key={c.id} onClick={() => { setCategory(c.id); setStep(2); }}
+                  <button key={c.id} onClick={() => goAfterCategory(c.id)}
                     className={`text-left rounded-lg border p-4 text-sm font-medium transition ${category === c.id ? "border-primary bg-primary/5" : "border-border hover:border-primary/40 hover:bg-secondary"}`}>
                     {c.label}
                   </button>
@@ -125,7 +140,7 @@ function DiagnosticsPage() {
             </div>
           )}
 
-          {step === 2 && (
+          {step === 2 && hasSymptomList && (
             <div>
               <h2 className="font-display text-xl font-bold text-foreground">Which symptoms match?</h2>
               <p className="text-sm text-muted-foreground mt-1">Select all that apply.</p>
@@ -152,11 +167,11 @@ function DiagnosticsPage() {
                 </label>
                 <label className="block">
                   <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Notes (optional)</span>
-                  <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={4} placeholder="When does it happen? Any sounds, smells, or warning lights?"
-                    className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none" />
+                  <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={6} placeholder="When does it happen? Any sounds, smells, or warning lights?"
+                    className="mt-1 w-full min-h-[140px] rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-y" />
                 </label>
               </div>
-              <BackRow onBack={() => setStep(2)} onNext={runAI} nextLabel={loading ? "Analyzing…" : "Run AI assessment"} disabled={loading} />
+              <BackRow onBack={() => setStep(hasSymptomList ? 2 : 1)} onNext={runAI} nextLabel={loading ? "Analyzing…" : "Run AI assessment"} disabled={loading} />
             </div>
           )}
 
@@ -186,13 +201,21 @@ function DiagnosticsPage() {
 
               <div className="mt-6 flex flex-wrap gap-2">
                 <Button asChild><Link to="/book">Book an accredited shop</Link></Button>
-                <Button variant="outline" onClick={() => { setStep(0); setResult(null); setSymptoms([]); }}>Start over</Button>
+                <Button variant="outline" onClick={() => { setStep(0); setResult(null); setSymptoms([]); setCategory(""); setErrorCode(""); setNotes(""); }}>Start over</Button>
               </div>
             </div>
           )}
         </div>
       </section>
     </PageShell>
+  );
+}
+
+function Chip({ children, onEdit }: { children: React.ReactNode; onEdit: () => void }) {
+  return (
+    <button onClick={onEdit} type="button" className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-1 text-primary hover:bg-primary/10">
+      <Check className="h-3 w-3" /> {children}
+    </button>
   );
 }
 
