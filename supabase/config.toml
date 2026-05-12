@@ -1,1 +1,16 @@
 project_id = "tkhcdxdnfkxyhdnuhqjo"
+
+[functions.ai-diagnostics]
+verify_jwt = false
+
+[functions.ai-chatbot]
+verify_jwt = true
+
+[functions.stripe-checkout]
+verify_jwt = true
+
+[functions.send-email]
+verify_jwt = true
+
+[functions.maintenance-reminders]
+verify_jwt = false
