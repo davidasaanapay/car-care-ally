@@ -1,15 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { MapPin, Phone, Star, ShieldCheck, Search } from "lucide-react";
 
+type ShopsSearch = { zip?: string; year?: string; make?: string; model?: string };
+
 export const Route = createFileRoute("/shops")({
+  validateSearch: (s: Record<string, unknown>): ShopsSearch => ({
+    zip: typeof s.zip === "string" ? s.zip : undefined,
+    year: typeof s.year === "string" ? s.year : undefined,
+    make: typeof s.make === "string" ? s.make : undefined,
+    model: typeof s.model === "string" ? s.model : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Find an Accredited Auto-Repair Shop — Car Care Ally" },
-      { name: "description", content: "Browse vetted auto-repair shops across all 50 US states. Filter by location, specialty, and ratings." },
+      { name: "description", content: "Browse vetted auto-repair shops across all 50 US states. Search by ZIP, city, state, or shop name." },
     ],
   }),
   component: ShopsPage,
@@ -22,25 +30,43 @@ interface Shop {
   description: string | null;
   city: string | null;
   state: string | null;
+  zip: string | null;
   rating: number | null;
   phone: string | null;
 }
 
 function ShopsPage() {
+  const search = Route.useSearch();
   const [shops, setShops] = useState<Shop[]>([]);
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState(search.zip ?? "");
+  const [submitted, setSubmitted] = useState(search.zip ?? "");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.from("shops").select("id,name,slug,description,city,state,rating,phone").eq("status", "active").then(({ data }) => {
+    supabase.from("shops").select("id,name,slug,description,city,state,zip,rating,phone").eq("status", "active").then(({ data }) => {
       setShops((data ?? []) as Shop[]);
       setLoading(false);
     });
   }, []);
 
-  const filtered = shops.filter((s) =>
-    !q || [s.name, s.city, s.state].filter(Boolean).join(" ").toLowerCase().includes(q.toLowerCase())
-  );
+  const suggestions = useMemo(() => {
+    const t = q.trim().toLowerCase();
+    if (!t || t === submitted.trim().toLowerCase()) return [];
+    return shops
+      .filter((s) => [s.name, s.city, s.state, s.zip].filter(Boolean).join(" ").toLowerCase().includes(t))
+      .slice(0, 6);
+  }, [q, shops, submitted]);
+
+  const filtered = useMemo(() => {
+    const t = submitted.trim().toLowerCase();
+    if (!t) return shops;
+    return shops.filter((s) => [s.name, s.city, s.state, s.zip].filter(Boolean).join(" ").toLowerCase().includes(t));
+  }, [submitted, shops]);
+
+  const onSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(q);
+  };
 
   return (
     <PageShell>
@@ -49,15 +75,35 @@ function ShopsPage() {
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">The network</p>
           <h1 className="mt-2 font-display text-5xl font-bold text-foreground">Accredited shops near you</h1>
           <p className="mt-4 text-muted-foreground">Every partner is vetted by Car Care Ally. Browse, compare, book.</p>
-          <div className="mt-6 flex items-center gap-2 rounded-lg border border-input bg-card px-4 py-3 max-w-xl mx-auto shadow-card">
-            <Search className="h-4 w-4 text-muted-foreground" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search by city, state, or shop name"
-              className="flex-1 bg-transparent text-sm outline-none"
-            />
-          </div>
+
+          <form onSubmit={onSearch} className="mt-6 max-w-xl mx-auto relative">
+            <div className="flex items-center gap-2 rounded-lg border border-input bg-card px-4 py-2 shadow-card">
+              <Search className="h-4 w-4 text-muted-foreground" />
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Search by ZIP, city, state, or shop name"
+                className="flex-1 bg-transparent text-sm outline-none py-1.5"
+              />
+              <Button type="submit" size="sm">Search</Button>
+            </div>
+            {suggestions.length > 0 && (
+              <ul className="absolute left-0 right-0 mt-1 z-20 rounded-lg border border-border bg-card shadow-elegant text-left overflow-hidden">
+                {suggestions.map((s) => (
+                  <li key={s.id}>
+                    <button
+                      type="button"
+                      onClick={() => { setQ(s.name); setSubmitted(s.name); }}
+                      className="w-full px-4 py-2 text-sm hover:bg-secondary flex items-center justify-between"
+                    >
+                      <span className="font-medium text-foreground">{s.name}</span>
+                      <span className="text-xs text-muted-foreground">{[s.city, s.state, s.zip].filter(Boolean).join(", ")}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </form>
         </div>
       </section>
 
@@ -67,7 +113,7 @@ function ShopsPage() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
             <ShieldCheck className="h-12 w-12 mx-auto text-muted-foreground/40" />
-            <p className="mt-4 text-foreground font-semibold">No active shops yet.</p>
+            <p className="mt-4 text-foreground font-semibold">No shops match your search.</p>
             <p className="mt-1 text-sm text-muted-foreground">The Car Care Ally team is onboarding partners across all 50 states. Check back soon.</p>
             <Button asChild className="mt-6"><Link to="/contact">Refer a shop</Link></Button>
           </div>
@@ -83,8 +129,8 @@ function ShopsPage() {
                 </div>
                 {s.description && <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{s.description}</p>}
                 <div className="mt-4 space-y-1 text-xs text-muted-foreground">
-                  {(s.city || s.state) && <div className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {[s.city, s.state].filter(Boolean).join(", ")}</div>}
-                  {s.phone && <div className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5" /> {s.phone}</div>}
+                  {(s.city || s.state || s.zip) && <div className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {[s.city, s.state, s.zip].filter(Boolean).join(", ")}</div>}
+                  {s.phone && <div className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5" /> <a href={`tel:${s.phone}`} className="hover:text-primary">{s.phone}</a></div>}
                 </div>
                 <Button asChild size="sm" className="mt-5 w-full"><Link to="/book" search={{ shop: s.slug } as never}>Book at this shop</Link></Button>
               </div>
