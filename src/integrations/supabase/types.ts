@@ -93,6 +93,30 @@ export type Database = {
           },
         ]
       }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       diagnostics: {
         Row: {
           ai_assessment: string | null
@@ -270,6 +294,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      maintenance_reminders: {
+        Row: {
+          due_date: string | null
+          id: string
+          owner_id: string
+          reminder_type: string
+          sent_at: string
+          vehicle_id: string
+        }
+        Insert: {
+          due_date?: string | null
+          id?: string
+          owner_id: string
+          reminder_type: string
+          sent_at?: string
+          vehicle_id: string
+        }
+        Update: {
+          due_date?: string | null
+          id?: string
+          owner_id?: string
+          reminder_type?: string
+          sent_at?: string
+          vehicle_id?: string
+        }
+        Relationships: []
       }
       marketplace_items: {
         Row: {
