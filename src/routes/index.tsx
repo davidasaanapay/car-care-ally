@@ -52,7 +52,7 @@ function Hero() {
           </div>
           <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.05] text-balance">
             Simply smarter <br />
-            <span className="bg-hero-gradient bg-clip-text text-transparent">car service.</span>
+            <span className="text-primary">car service.</span>
           </h1>
           <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
             Diagnose issues with AI in 60 seconds, get a transparent estimate, and book an
