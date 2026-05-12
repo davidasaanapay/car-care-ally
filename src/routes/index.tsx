@@ -1,10 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
+import { VehicleSelect, type VehicleSelection } from "@/components/VehicleSelect";
 import {
-  Sparkles, ShieldCheck, Calendar, Wrench, Car, Cpu, FileText,
-  Search, MapPin, ArrowRight, Star, Gauge, Bell,
+  Sparkles, ShieldCheck, Calendar, Wrench, Cpu, FileText,
+  MapPin, ArrowRight, Star, Gauge, Bell,
 } from "lucide-react";
 import heroImg from "@/images/hero.jpg";
 
