@@ -66,7 +66,6 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   return brandedErrorResponse();
 }
 
-// Netlify Functions handler
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
@@ -78,22 +77,4 @@ export default {
       return brandedErrorResponse();
     }
   },
-};
-
-// Export for Netlify Functions
-export const handler = async (event: any) => {
-  const request = new Request(new URL(event.rawPath || event.path, `https://${event.headers.host}`), {
-    method: event.requestContext?.http?.method || "GET",
-    headers: event.headers,
-    body: event.body ? Buffer.from(event.body, event.isBase64Encoded ? "base64" : "utf8") : undefined,
-  });
-
-  const response = await exports.default.fetch(request, {}, {});
-  
-  return {
-    statusCode: response.status,
-    headers: Object.fromEntries(response.headers),
-    body: await response.text(),
-    isBase64Encoded: false,
-  };
 };
