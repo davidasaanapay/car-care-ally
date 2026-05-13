@@ -43,13 +43,12 @@ export function SiteFooter() {
           <p>© {new Date().getFullYear()} Car Care Ally. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span>Made in the USA</span>
-            {/* Subtle super-admin entry point */}
             <Link
               to="/super-admin"
-              className="opacity-40 hover:opacity-100 hover:text-primary transition-opacity"
-              aria-label="Platform administration"
+              className="text-muted-foreground hover:text-primary transition-colors underline-offset-4 hover:underline"
+              aria-label="Support Login"
             >
-              ·
+              Support Login
             </Link>
           </div>
         </div>
