@@ -1,5 +1,5 @@
 import { PageMeta } from "@/lib/page-meta";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
@@ -21,10 +21,11 @@ interface Shop {
 }
 
 function ShopsPage() {
-  const search = Route.useSearch();
+  const [params] = useSearchParams();
+  const initialZip = params.get("zip") ?? "";
   const [shops, setShops] = useState<Shop[]>([]);
-  const [q, setQ] = useState(search.zip ?? "");
-  const [submitted, setSubmitted] = useState(search.zip ?? "");
+  const [q, setQ] = useState(initialZip);
+  const [submitted, setSubmitted] = useState(initialZip);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

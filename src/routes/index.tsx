@@ -96,7 +96,8 @@ function FindByVehicle() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    nav({ to: "/shops", search: { zip, year: vehicle.year, make: vehicle.make, model: vehicle.model } as never });
+    const sp = new URLSearchParams({ zip, year: vehicle.year, make: vehicle.make, model: vehicle.model });
+    nav(`/shops?${sp.toString()}`);
   };
 
   return (
