@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link, useNavigate } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -6,13 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { UserPlus } from "lucide-react";
-
-export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Create account — Car Care Ally" }, { name: "description", content: "Create your free Car Care Ally account." }] }),
-  component: SignupPage,
-});
-
 function SignupPage() {
+  useDocumentTitle("Create account — Car Care Ally", "Create your free Car Care Ally account.");
   const [mode, setMode] = useState<"password" | "otp">("password");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,7 +31,7 @@ function SignupPage() {
     // Auto-confirm is enabled, so we can sign in immediately
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
     if (signInError) return toast.error(signInError.message);
-    nav({ to: "/dashboard" });
+    nav("/dashboard");
   };
 
   const sendCode = async (e: React.FormEvent) => {
@@ -58,7 +54,7 @@ function SignupPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome to Car Care Ally!");
-    nav({ to: "/dashboard" });
+    nav("/dashboard");
   };
 
   return (
@@ -135,5 +131,8 @@ function Field({ label, required, hint, children }: { label: string; required?: 
       <div className="mt-1">{children}</div>
       {hint && <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p>}
     </label>
+
   );
 }
+
+export default SignupPage;

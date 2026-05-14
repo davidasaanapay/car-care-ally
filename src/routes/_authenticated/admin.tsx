@@ -1,17 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { ShieldCheck, Store, Users, KeyRound, Settings, Plus } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — Car Care Ally" }, { name: "robots", content: "noindex" }] }),
-  component: AdminPage,
-});
-
 function AdminPage() {
+  useDocumentTitle("Admin — Car Care Ally");
   const { isSuperAdmin, loading } = useAuth();
   const [tab, setTab] = useState<"shops" | "users" | "settings" | "keys">("shops");
 
@@ -173,5 +169,8 @@ function KeysAdmin() {
         ))}
       </div>
     </div>
+
   );
 }
+
+export default AdminPage;

@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { NavLink as Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
 import { useAuth } from "@/lib/auth";
@@ -27,8 +27,7 @@ export function SiteHeader() {
             <Link
               key={n.to}
               to={n.to}
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              activeProps={{ className: "text-primary" }}
+              className={({ isActive }) => `text-sm font-medium transition-colors ${isActive ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
             >
               {n.label}
             </Link>

@@ -1,4 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { useNavigate } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -6,13 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { ShieldCheck } from "lucide-react";
-
-export const Route = createFileRoute("/super-admin")({
-  head: () => ({ meta: [{ title: "Support Login — Car Care Ally" }, { name: "robots", content: "noindex,nofollow" }] }),
-  component: SuperAdminPage,
-});
-
 function SuperAdminPage() {
+  useDocumentTitle("Support Login — Car Care Ally");
   const [mode, setMode] = useState<"password" | "otp">("password");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +21,7 @@ function SuperAdminPage() {
     const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userId).eq("role", "super_admin");
     if (roles && roles.length > 0) {
       toast.success("Welcome, support admin.");
-      nav({ to: "/admin" });
+      nav("/admin");
       return true;
     }
     toast.error("This account is not authorized for platform administration.");
@@ -104,5 +100,8 @@ function SuperAdminPage() {
         </div>
       </section>
     </PageShell>
+
   );
 }
+
+export default SuperAdminPage;

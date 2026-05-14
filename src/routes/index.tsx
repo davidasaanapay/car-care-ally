@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { PageShell } from "@/components/PageShell";
@@ -9,20 +10,8 @@ import {
   MapPin, ArrowRight, Star, Gauge, Bell,
 } from "lucide-react";
 import heroImg from "@/images/hero.jpg";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Car Care Ally — AI-Powered Auto Care for Every American Driver" },
-      { name: "description", content: "Diagnose your vehicle in seconds, book accredited US repair shops, and manage every car you own — all on one trusted platform." },
-      { property: "og:title", content: "Car Care Ally" },
-      { property: "og:description", content: "AI-powered diagnostics and a nationwide network of accredited auto-repair shops." },
-    ],
-  }),
-  component: HomePage,
-});
-
 function HomePage() {
+  useDocumentTitle("Car Care Ally — AI-Powered Auto Care for Every American Driver", "Diagnose your vehicle in seconds, book accredited US repair shops, and manage every car you own — all on one trusted platform.");
   return (
     <PageShell>
       <Hero />
@@ -106,7 +95,8 @@ function FindByVehicle() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    nav({ to: "/shops", search: { zip, year: vehicle.year, make: vehicle.make, model: vehicle.model } as never });
+    const sp = new URLSearchParams({ zip, year: vehicle.year, make: vehicle.make, model: vehicle.model });
+    nav(`/shops?${sp.toString()}`);
   };
 
   return (
@@ -261,5 +251,8 @@ function CtaBanner() {
         </div>
       </div>
     </section>
+
   );
 }
+
+export default HomePage;

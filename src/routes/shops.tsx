@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
@@ -6,22 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { MapPin, Phone, Star, ShieldCheck, Search } from "lucide-react";
 
 type ShopsSearch = { zip?: string; year?: string; make?: string; model?: string };
-
-export const Route = createFileRoute("/shops")({
-  validateSearch: (s: Record<string, unknown>): ShopsSearch => ({
-    zip: typeof s.zip === "string" ? s.zip : undefined,
-    year: typeof s.year === "string" ? s.year : undefined,
-    make: typeof s.make === "string" ? s.make : undefined,
-    model: typeof s.model === "string" ? s.model : undefined,
-  }),
-  head: () => ({
-    meta: [
-      { title: "Find an Accredited Auto-Repair Shop — Car Care Ally" },
-      { name: "description", content: "Browse vetted auto-repair shops across all 50 US states. Search by ZIP, city, state, or shop name." },
-    ],
-  }),
-  component: ShopsPage,
-});
 
 interface Shop {
   id: string;
@@ -36,10 +21,12 @@ interface Shop {
 }
 
 function ShopsPage() {
-  const search = Route.useSearch();
+  useDocumentTitle("Find an Accredited Auto-Repair Shop — Car Care Ally", "Browse vetted auto-repair shops across all 50 US states. Search by ZIP, city, state, or shop name.");
+  const [params] = useSearchParams();
+  const initialZip = params.get("zip") ?? "";
   const [shops, setShops] = useState<Shop[]>([]);
-  const [q, setQ] = useState(search.zip ?? "");
-  const [submitted, setSubmitted] = useState(search.zip ?? "");
+  const [q, setQ] = useState(initialZip);
+  const [submitted, setSubmitted] = useState(initialZip);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -132,12 +119,15 @@ function ShopsPage() {
                   {(s.city || s.state || s.zip) && <div className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {[s.city, s.state, s.zip].filter(Boolean).join(", ")}</div>}
                   {s.phone && <div className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5" /> <a href={`tel:${s.phone}`} className="hover:text-primary">{s.phone}</a></div>}
                 </div>
-                <Button asChild size="sm" className="mt-5 w-full"><Link to="/book" search={{ shop: s.slug } as never}>Book at this shop</Link></Button>
+                <Button asChild size="sm" className="mt-5 w-full"><Link to={`/book?shop=${s.slug}`}>Book at this shop</Link></Button>
               </div>
             ))}
           </div>
         )}
       </section>
     </PageShell>
+
   );
 }
+
+export default ShopsPage;

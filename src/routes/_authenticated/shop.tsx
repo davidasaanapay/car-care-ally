@@ -1,17 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Store, Calendar, Package, FileText, Plus } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated/shop")({
-  head: () => ({ meta: [{ title: "Shop Dashboard — Car Care Ally" }, { name: "robots", content: "noindex" }] }),
-  component: ShopDashboard,
-});
-
 function ShopDashboard() {
+  useDocumentTitle("Shop Dashboard — Car Care Ally");
   const { user, loading } = useAuth();
   const [shop, setShop] = useState<any>(null);
   const [tab, setTab] = useState<"overview" | "appointments" | "marketplace" | "invoices">("overview");
@@ -175,5 +170,8 @@ function InvoicesList({ invoices }: any) {
         </div>
       ))}
     </div>
+
   );
 }
+
+export default ShopDashboard;

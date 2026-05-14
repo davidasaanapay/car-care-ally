@@ -1,18 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Send, Bot, User as UserIcon, Loader2 } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/chat")({
-  head: () => ({ meta: [{ title: "AI Assistant — Car Care Ally" }] }),
-  component: ChatPage,
-});
-
 type Msg = { role: "user" | "assistant"; content: string };
 
 function ChatPage() {
+  useDocumentTitle("AI Assistant — Car Care Ally");
   const { user } = useAuth();
   const [messages, setMessages] = useState<Msg[]>([
     { role: "assistant", content: "Hi! I'm CCA Ally. Tell me what's going on with your vehicle and I'll help you figure out next steps." },
@@ -91,5 +87,8 @@ function ChatPage() {
         </Button>
       </div>
     </div>
+
   );
 }
+
+export default ChatPage;

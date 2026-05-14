@@ -1,17 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { PageShell } from "@/components/PageShell";
 
-export const Route = createFileRoute("/terms")({
-  head: () => ({
-    meta: [
-      { title: "Terms of Service — Car Care Ally" },
-      { name: "description", content: "Car Care Ally terms of service. Read the rules for using carcareally.com, booking with shops, payments, disputes, and arbitration." },
-    ],
-  }),
-  component: TermsPage,
-});
-
 function TermsPage() {
+  useDocumentTitle("Terms of Service — Car Care Ally", "Car Care Ally terms of service. Read the rules for using carcareally.com, booking with shops, payments, disputes, and arbitration.");
   return (
     <PageShell>
       <article className="container mx-auto px-4 py-16 max-w-3xl">
@@ -96,5 +87,8 @@ function TermsPage() {
         </div>
       </article>
     </PageShell>
+
   );
 }
+
+export default TermsPage;

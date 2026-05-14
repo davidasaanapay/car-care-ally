@@ -1,14 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Cpu, Calendar, Car, FileText, MessageSquare } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Car Care Ally" }] }),
-  component: Dashboard,
-});
-
 function Dashboard() {
+  useDocumentTitle("Dashboard — Car Care Ally");
   const { user } = useAuth();
   const name = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "there";
   const tiles = [
@@ -39,5 +35,8 @@ function Dashboard() {
         </div>
       </div>
     </div>
+
   );
 }
+
+export default Dashboard;

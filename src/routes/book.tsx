@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -6,17 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { Calendar, CheckCircle2 } from "lucide-react";
-
-export const Route = createFileRoute("/book")({
-  head: () => ({
-    meta: [
-      { title: "Book a Service — Car Care Ally" },
-      { name: "description", content: "Book an accredited US auto-repair shop. Guest checkout — no account required." },
-    ],
-  }),
-  component: BookPage,
-});
-
 const TIMEZONES: { label: string; value: string }[] = [
   { label: "Eastern (EST/EDT)", value: "America/New_York" },
   { label: "Central (CST/CDT)", value: "America/Chicago" },
@@ -42,6 +32,7 @@ function formatPhone(raw: string): string {
 }
 
 function BookPage() {
+  useDocumentTitle("Book a Service — Car Care Ally", "Book an accredited US auto-repair shop. Guest checkout — no account required.");
   const { user } = useAuth();
   const [shops, setShops] = useState<any[]>([]);
   const [success, setSuccess] = useState(false);
@@ -175,5 +166,8 @@ function Field({ label, required, hint, children }: { label: string; required?: 
       <div className="mt-1">{children}</div>
       {hint && <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p>}
     </label>
+
   );
 }
+
+export default BookPage;

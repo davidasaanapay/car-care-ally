@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -6,14 +6,10 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Plus, Trash2, Car } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/vehicles")({
-  head: () => ({ meta: [{ title: "My Garage — Car Care Ally" }] }),
-  component: VehiclesPage,
-});
-
 interface V { id: string; year: number; make: string; model: string; trim: string | null; license_plate: string | null; nickname: string | null; mileage: number | null; }
 
 function VehiclesPage() {
+  useDocumentTitle("My Garage — Car Care Ally");
   const { user } = useAuth();
   const [list, setList] = useState<V[]>([]);
   const [open, setOpen] = useState(false);
@@ -104,5 +100,8 @@ function VehiclesPage() {
         ))}
       </div>
     </div>
+
   );
 }
+
+export default VehiclesPage;

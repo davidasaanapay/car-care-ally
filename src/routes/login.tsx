@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link, useNavigate } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -6,13 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Mail, KeyRound } from "lucide-react";
-
-export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Sign In — Car Care Ally" }, { name: "description", content: "Sign in to your Car Care Ally account." }] }),
-  component: LoginPage,
-});
-
 function LoginPage() {
+  useDocumentTitle("Sign In — Car Care Ally", "Sign in to your Car Care Ally account.");
   const [mode, setMode] = useState<"password" | "otp">("password");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +24,7 @@ function LoginPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back!");
-    nav({ to: "/dashboard" });
+    nav("/dashboard");
   };
 
   const sendCode = async (e: React.FormEvent) => {
@@ -48,7 +44,7 @@ function LoginPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back!");
-    nav({ to: "/dashboard" });
+    nav("/dashboard");
   };
 
   return (
@@ -99,5 +95,8 @@ function LoginPage() {
         </div>
       </section>
     </PageShell>
+
   );
 }
+
+export default LoginPage;

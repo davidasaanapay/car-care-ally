@@ -1,18 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-
-export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    meta: [
-      { title: "Pricing — Car Care Ally" },
-      { name: "description", content: "Simple monthly SaaS pricing for auto-repair shops. Drivers always use Car Care Ally for free." },
-    ],
-  }),
-  component: PricingPage,
-});
-
 const tiers = [
   {
     name: "Driver",
@@ -65,6 +55,7 @@ const tiers = [
 ];
 
 function PricingPage() {
+  useDocumentTitle("Pricing — Car Care Ally", "Simple monthly SaaS pricing for auto-repair shops. Drivers always use Car Care Ally for free.");
   return (
     <PageShell>
       <section className="bg-subtle-gradient py-20">
@@ -122,5 +113,8 @@ function PricingPage() {
         </p>
       </section>
     </PageShell>
+
   );
 }
+
+export default PricingPage;
