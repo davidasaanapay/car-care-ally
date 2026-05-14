@@ -1,19 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { PageMeta } from "@/lib/page-meta";
 import { PageShell } from "@/components/PageShell";
-
-export const Route = createFileRoute("/terms")({
-  head: () => ({
-    meta: [
-      { title: "Terms of Service — Car Care Ally" },
-      { name: "description", content: "Car Care Ally terms of service. Read the rules for using carcareally.com, booking with shops, payments, disputes, and arbitration." },
-    ],
-  }),
-  component: TermsPage,
-});
 
 function TermsPage() {
   return (
-    <PageShell>
+    <><PageMeta title="Terms of Service — Car Care Ally" description="Car Care Ally terms of service. Read the rules for using carcareally.com, booking with shops, payments, disputes, and arbitration." />
+      <PageShell>
       <article className="container mx-auto px-4 py-16 max-w-3xl">
         <h1 className="font-display text-4xl font-bold text-foreground">Terms of Service</h1>
         <p className="mt-2 text-sm text-muted-foreground">Effective date: May 12, 2026 · Last updated: May 12, 2026</p>
@@ -96,5 +87,8 @@ function TermsPage() {
         </div>
       </article>
     </PageShell>
+    </>
   );
 }
+
+export default TermsPage;

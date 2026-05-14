@@ -1,19 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { PageMeta } from "@/lib/page-meta";
 import { PageShell } from "@/components/PageShell";
-
-export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About — Car Care Ally" },
-      { name: "description", content: "Car Care Ally is on a mission to make auto care simpler, more transparent, and more trustworthy for every American driver." },
-    ],
-  }),
-  component: AboutPage,
-});
 
 function AboutPage() {
   return (
-    <PageShell>
+    <><PageMeta title="About — Car Care Ally" description="Car Care Ally is on a mission to make auto care simpler, more transparent, and more trustworthy for every American driver." />
+      <PageShell>
       <section className="container mx-auto px-4 py-20 max-w-3xl">
         <p className="text-sm font-semibold uppercase tracking-wider text-primary">Our mission</p>
         <h1 className="mt-2 font-display text-5xl font-bold text-foreground text-balance">
@@ -52,5 +43,8 @@ function Pillar({ title, desc }: { title: string; desc: string }) {
       <h3 className="font-display font-semibold text-foreground">{title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
     </div>
+    </>
   );
 }
+
+export default AboutPage;

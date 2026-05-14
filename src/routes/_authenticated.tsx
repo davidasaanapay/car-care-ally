@@ -1,12 +1,8 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { Outlet } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { PageShell } from "@/components/PageShell";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Car, Calendar, FileText, User, ShieldCheck, MessagesSquare, Store } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated")({
-  component: AuthLayout,
-});
 
 function AuthLayout() {
   const { user, loading, isSuperAdmin, isShopOwner } = useAuth();
@@ -55,3 +51,5 @@ function AuthLayout() {
     </PageShell>
   );
 }
+
+export default AuthLayout;

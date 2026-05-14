@@ -1,17 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-
-export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    meta: [
-      { title: "Pricing — Car Care Ally" },
-      { name: "description", content: "Simple monthly SaaS pricing for auto-repair shops. Drivers always use Car Care Ally for free." },
-    ],
-  }),
-  component: PricingPage,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 const tiers = [
   {
@@ -66,7 +57,8 @@ const tiers = [
 
 function PricingPage() {
   return (
-    <PageShell>
+    <><PageMeta title="Pricing — Car Care Ally" description="Simple monthly SaaS pricing for auto-repair shops. Drivers always use Car Care Ally for free." />
+      <PageShell>
       <section className="bg-subtle-gradient py-20">
         <div className="container mx-auto px-4 text-center max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">Pricing</p>
@@ -122,5 +114,8 @@ function PricingPage() {
         </p>
       </section>
     </PageShell>
+    </>
   );
 }
+
+export default PricingPage;

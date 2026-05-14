@@ -1,15 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Store, Calendar, Package, FileText, Plus } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated/shop")({
-  head: () => ({ meta: [{ title: "Shop Dashboard — Car Care Ally" }, { name: "robots", content: "noindex" }] }),
-  component: ShopDashboard,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 function ShopDashboard() {
   const { user, loading } = useAuth();
@@ -33,7 +28,8 @@ function ShopDashboard() {
 
   if (loading) return <p className="text-muted-foreground">Loading…</p>;
   if (!shop) return (
-    <div className="rounded-xl border bg-card p-10 text-center">
+    <><PageMeta title="Shop Dashboard — Car Care Ally" />
+      <div className="rounded-xl border bg-card p-10 text-center">
       <Store className="h-10 w-10 mx-auto text-muted-foreground/40" />
       <p className="mt-3 font-semibold text-foreground">No shop linked to your account</p>
       <p className="mt-1 text-sm text-muted-foreground">A super admin must onboard your shop first. Email <a href="mailto:partners@carcareally.com" className="text-primary">partners@carcareally.com</a>.</p>
@@ -175,5 +171,8 @@ function InvoicesList({ invoices }: any) {
         </div>
       ))}
     </div>
+    </>
   );
 }
+
+export default ShopDashboard;

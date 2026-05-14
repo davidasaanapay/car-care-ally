@@ -1,19 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { PageMeta } from "@/lib/page-meta";
 import { PageShell } from "@/components/PageShell";
-
-export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Privacy Policy — Car Care Ally" },
-      { name: "description", content: "Car Care Ally privacy policy. CCPA / CPRA, GDPR, and US state privacy law compliant. Learn how we collect, use, and protect your information." },
-    ],
-  }),
-  component: PrivacyPage,
-});
 
 function PrivacyPage() {
   return (
-    <PageShell>
+    <><PageMeta title="Privacy Policy — Car Care Ally" description="Car Care Ally privacy policy. CCPA / CPRA, GDPR, and US state privacy law compliant. Learn how we collect, use, and protect your information." />
+      <PageShell>
       <article className="container mx-auto px-4 py-16 max-w-3xl">
         <h1 className="font-display text-4xl font-bold text-foreground">Privacy Policy</h1>
         <p className="mt-2 text-sm text-muted-foreground">Effective date: May 12, 2026 · Last updated: May 12, 2026</p>
@@ -104,5 +95,8 @@ function PrivacyPage() {
         </div>
       </article>
     </PageShell>
+    </>
   );
 }
+
+export default PrivacyPage;

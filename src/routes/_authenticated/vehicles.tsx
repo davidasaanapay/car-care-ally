@@ -1,15 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { PageMeta } from "@/lib/page-meta";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Plus, Trash2, Car } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated/vehicles")({
-  head: () => ({ meta: [{ title: "My Garage — Car Care Ally" }] }),
-  component: VehiclesPage,
-});
 
 interface V { id: string; year: number; make: string; model: string; trim: string | null; license_plate: string | null; nickname: string | null; mileage: number | null; }
 
@@ -46,7 +41,8 @@ function VehiclesPage() {
   };
 
   return (
-    <div>
+    <><PageMeta title="My Garage — Car Care Ally" />
+      <div>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold text-foreground">My Garage</h1>
@@ -104,5 +100,8 @@ function VehiclesPage() {
         ))}
       </div>
     </div>
+    </>
   );
 }
+
+export default VehiclesPage;

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -6,11 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Mail, KeyRound } from "lucide-react";
-
-export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Sign In — Car Care Ally" }, { name: "description", content: "Sign in to your Car Care Ally account." }] }),
-  component: LoginPage,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 function LoginPage() {
   const [mode, setMode] = useState<"password" | "otp">("password");
@@ -28,7 +24,7 @@ function LoginPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back!");
-    nav({ to: "/dashboard" });
+    nav("/dashboard");
   };
 
   const sendCode = async (e: React.FormEvent) => {
@@ -48,11 +44,12 @@ function LoginPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back!");
-    nav({ to: "/dashboard" });
+    nav("/dashboard");
   };
 
   return (
-    <PageShell>
+    <><PageMeta title="Sign In — Car Care Ally" description="Sign in to your Car Care Ally account." />
+      <PageShell>
       <section className="container mx-auto px-4 py-20 max-w-md">
         <div className="rounded-2xl border border-border bg-card p-8 shadow-card">
           <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">
@@ -99,5 +96,8 @@ function LoginPage() {
         </div>
       </section>
     </PageShell>
+    </>
   );
 }
+
+export default LoginPage;

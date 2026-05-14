@@ -1,14 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-
-export const Route = createFileRoute("/_authenticated/profile")({
-  head: () => ({ meta: [{ title: "Profile — Car Care Ally" }] }),
-  component: ProfilePage,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 function ProfilePage() {
   const { user, signOut } = useAuth();
@@ -30,7 +25,8 @@ function ProfilePage() {
   };
 
   return (
-    <div>
+    <><PageMeta title="Profile — Car Care Ally" />
+      <div>
       <h1 className="font-display text-3xl font-bold text-foreground">Profile</h1>
       <p className="mt-1 text-sm text-muted-foreground">{user?.email}</p>
       <form onSubmit={save} className="mt-8 rounded-xl border bg-card p-6 grid sm:grid-cols-2 gap-3 max-w-2xl">
@@ -47,5 +43,8 @@ function ProfilePage() {
         </div>
       </form>
     </div>
+    </>
   );
 }
+
+export default ProfilePage;

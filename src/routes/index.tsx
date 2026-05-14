@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { PageShell } from "@/components/PageShell";
@@ -9,22 +9,12 @@ import {
   MapPin, ArrowRight, Star, Gauge, Bell,
 } from "lucide-react";
 import heroImg from "@/images/hero.jpg";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Car Care Ally — AI-Powered Auto Care for Every American Driver" },
-      { name: "description", content: "Diagnose your vehicle in seconds, book accredited US repair shops, and manage every car you own — all on one trusted platform." },
-      { property: "og:title", content: "Car Care Ally" },
-      { property: "og:description", content: "AI-powered diagnostics and a nationwide network of accredited auto-repair shops." },
-    ],
-  }),
-  component: HomePage,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 function HomePage() {
   return (
-    <PageShell>
+    <><PageMeta title="Car Care Ally — AI-Powered Auto Care for Every American Driver" description="Diagnose your vehicle in seconds, book accredited US repair shops, and manage every car you own — all on one trusted platform." />
+      <PageShell>
       <Hero />
       <FindByVehicle />
       <ValueProps />
@@ -261,5 +251,8 @@ function CtaBanner() {
         </div>
       </div>
     </section>
+    </>
   );
 }
+
+export default HomePage;

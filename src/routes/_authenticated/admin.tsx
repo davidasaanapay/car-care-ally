@@ -1,15 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { ShieldCheck, Store, Users, KeyRound, Settings, Plus } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — Car Care Ally" }, { name: "robots", content: "noindex" }] }),
-  component: AdminPage,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 function AdminPage() {
   const { isSuperAdmin, loading } = useAuth();
@@ -17,7 +13,8 @@ function AdminPage() {
 
   if (loading) return <p className="text-muted-foreground">Loading…</p>;
   if (!isSuperAdmin) return (
-    <div className="rounded-xl border bg-card p-10 text-center">
+    <><PageMeta title="Admin — Car Care Ally" />
+      <div className="rounded-xl border bg-card p-10 text-center">
       <ShieldCheck className="h-10 w-10 mx-auto text-muted-foreground/40" />
       <p className="mt-3 font-semibold text-foreground">Restricted area</p>
       <p className="mt-1 text-sm text-muted-foreground">Super admin access required.</p>
@@ -173,5 +170,8 @@ function KeysAdmin() {
         ))}
       </div>
     </div>
+    </>
   );
 }
+
+export default AdminPage;

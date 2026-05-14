@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -6,11 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { UserPlus } from "lucide-react";
-
-export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Create account — Car Care Ally" }, { name: "description", content: "Create your free Car Care Ally account." }] }),
-  component: SignupPage,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 function SignupPage() {
   const [mode, setMode] = useState<"password" | "otp">("password");
@@ -35,7 +31,7 @@ function SignupPage() {
     // Auto-confirm is enabled, so we can sign in immediately
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
     if (signInError) return toast.error(signInError.message);
-    nav({ to: "/dashboard" });
+    nav("/dashboard");
   };
 
   const sendCode = async (e: React.FormEvent) => {
@@ -58,11 +54,12 @@ function SignupPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome to Car Care Ally!");
-    nav({ to: "/dashboard" });
+    nav("/dashboard");
   };
 
   return (
-    <PageShell>
+    <><PageMeta title="Create account — Car Care Ally" description="Create your free Car Care Ally account." />
+      <PageShell>
       <section className="container mx-auto px-4 py-20 max-w-md">
         <div className="rounded-2xl border border-border bg-card p-8 shadow-card">
           <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">
@@ -135,5 +132,8 @@ function Field({ label, required, hint, children }: { label: string; required?: 
       <div className="mt-1">{children}</div>
       {hint && <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p>}
     </label>
+    </>
   );
 }
+
+export default SignupPage;

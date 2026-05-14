@@ -1,19 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Mail, Phone, MapPin } from "lucide-react";
-
-export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — Car Care Ally" },
-      { name: "description", content: "Talk to the Car Care Ally team about partnership, support, or media inquiries." },
-    ],
-  }),
-  component: ContactPage,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 function ContactPage() {
   const [sending, setSending] = useState(false);
@@ -30,7 +20,8 @@ function ContactPage() {
   };
 
   return (
-    <PageShell>
+    <><PageMeta title="Contact — Car Care Ally" description="Talk to the Car Care Ally team about partnership, support, or media inquiries." />
+      <PageShell>
       <section className="container mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 max-w-5xl">
         <div>
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">Contact</p>
@@ -64,5 +55,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</span>
       <div className="mt-1.5">{children}</div>
     </label>
+    </>
   );
 }
+
+export default ContactPage;

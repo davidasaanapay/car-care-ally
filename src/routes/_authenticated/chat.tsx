@@ -1,14 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { PageMeta } from "@/lib/page-meta";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Send, Bot, User as UserIcon, Loader2 } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated/chat")({
-  head: () => ({ meta: [{ title: "AI Assistant — Car Care Ally" }] }),
-  component: ChatPage,
-});
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -54,7 +49,8 @@ function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-200px)]">
+    <><PageMeta title="AI Assistant — Car Care Ally" />
+      <div className="flex flex-col h-[calc(100vh-200px)]">
       <h1 className="font-display text-3xl font-bold text-foreground">CCA Ally — AI Assistant</h1>
       <p className="mt-1 text-sm text-muted-foreground">Ask anything about your vehicle, repairs, or maintenance.</p>
 
@@ -91,5 +87,8 @@ function ChatPage() {
         </Button>
       </div>
     </div>
+    </>
   );
 }
+
+export default ChatPage;

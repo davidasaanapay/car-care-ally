@@ -1,12 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Cpu, Calendar, Car, FileText, MessageSquare } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Car Care Ally" }] }),
-  component: Dashboard,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 function Dashboard() {
   const { user } = useAuth();
@@ -19,7 +15,8 @@ function Dashboard() {
     { to: "/invoices", icon: FileText, title: "Invoices", desc: "Review work and pay securely." },
   ];
   return (
-    <div>
+    <><PageMeta title="Dashboard — Car Care Ally" />
+      <div>
       <h1 className="font-display text-3xl font-bold text-foreground">Welcome back, {name}.</h1>
       <p className="mt-1 text-sm text-muted-foreground">Here's everything you need to keep your vehicles in shape.</p>
       <div className="mt-8 grid sm:grid-cols-2 gap-4">
@@ -39,5 +36,8 @@ function Dashboard() {
         </div>
       </div>
     </div>
+    </>
   );
 }
+
+export default Dashboard;

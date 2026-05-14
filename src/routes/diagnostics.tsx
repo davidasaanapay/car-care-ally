@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -6,16 +6,7 @@ import { Cpu, ArrowRight, ArrowLeft, Sparkles, AlertTriangle, Check } from "luci
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { VehicleSelect, type VehicleSelection } from "@/components/VehicleSelect";
-
-export const Route = createFileRoute("/diagnostics")({
-  head: () => ({
-    meta: [
-      { title: "AI Vehicle Diagnostics — Car Care Ally" },
-      { name: "description", content: "Tell us your symptoms and our AI will identify the most likely issue and price range." },
-    ],
-  }),
-  component: DiagnosticsPage,
-});
+import { PageMeta } from "@/lib/page-meta";
 
 const issueCategories = [
   { id: "engine", label: "Engine / Check Engine Light" },
@@ -87,7 +78,8 @@ function DiagnosticsPage() {
   };
 
   return (
-    <PageShell>
+    <><PageMeta title="AI Vehicle Diagnostics — Car Care Ally" description="Tell us your symptoms and our AI will identify the most likely issue and price range." />
+      <PageShell>
       <section className="container mx-auto px-4 py-12 max-w-3xl">
         <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-primary">
           <Cpu className="h-4 w-4" /> AI Diagnostics
@@ -232,5 +224,8 @@ function BackRow({ onBack, onNext, disabled, nextLabel = "Continue" }: { onBack:
       <Button variant="ghost" onClick={onBack}><ArrowLeft className="mr-1 h-4 w-4" /> Back</Button>
       {onNext && <Button onClick={onNext} disabled={disabled}>{nextLabel} <ArrowRight className="ml-1 h-4 w-4" /></Button>}
     </div>
+    </>
   );
 }
+
+export default DiagnosticsPage;

@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { PageMeta } from "@/lib/page-meta";
+import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
@@ -6,22 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { MapPin, Phone, Star, ShieldCheck, Search } from "lucide-react";
 
 type ShopsSearch = { zip?: string; year?: string; make?: string; model?: string };
-
-export const Route = createFileRoute("/shops")({
-  validateSearch: (s: Record<string, unknown>): ShopsSearch => ({
-    zip: typeof s.zip === "string" ? s.zip : undefined,
-    year: typeof s.year === "string" ? s.year : undefined,
-    make: typeof s.make === "string" ? s.make : undefined,
-    model: typeof s.model === "string" ? s.model : undefined,
-  }),
-  head: () => ({
-    meta: [
-      { title: "Find an Accredited Auto-Repair Shop — Car Care Ally" },
-      { name: "description", content: "Browse vetted auto-repair shops across all 50 US states. Search by ZIP, city, state, or shop name." },
-    ],
-  }),
-  component: ShopsPage,
-});
 
 interface Shop {
   id: string;
@@ -69,7 +54,8 @@ function ShopsPage() {
   };
 
   return (
-    <PageShell>
+    <><PageMeta title="Find an Accredited Auto-Repair Shop — Car Care Ally" description="Browse vetted auto-repair shops across all 50 US states. Search by ZIP, city, state, or shop name." />
+      <PageShell>
       <section className="bg-subtle-gradient py-16">
         <div className="container mx-auto px-4 max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">The network</p>
@@ -139,5 +125,8 @@ function ShopsPage() {
         )}
       </section>
     </PageShell>
+    </>
   );
 }
+
+export default ShopsPage;
