@@ -1,4 +1,4 @@
-import { PageMeta } from "@/lib/page-meta";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { PageShell } from "@/components/PageShell";
@@ -21,6 +21,7 @@ interface Shop {
 }
 
 function ShopsPage() {
+  useDocumentTitle("Find an Accredited Auto-Repair Shop — Car Care Ally", "Browse vetted auto-repair shops across all 50 US states. Search by ZIP, city, state, or shop name.");
   const [params] = useSearchParams();
   const initialZip = params.get("zip") ?? "";
   const [shops, setShops] = useState<Shop[]>([]);
@@ -55,8 +56,7 @@ function ShopsPage() {
   };
 
   return (
-    <><PageMeta title="Find an Accredited Auto-Repair Shop — Car Care Ally" description="Browse vetted auto-repair shops across all 50 US states. Search by ZIP, city, state, or shop name." />
-      <PageShell>
+    <PageShell>
       <section className="bg-subtle-gradient py-16">
         <div className="container mx-auto px-4 max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">The network</p>

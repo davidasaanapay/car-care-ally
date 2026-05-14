@@ -1,10 +1,10 @@
-import { PageMeta } from "@/lib/page-meta";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { PageShell } from "@/components/PageShell";
 
 function AboutPage() {
+  useDocumentTitle("About — Car Care Ally", "Car Care Ally is on a mission to make auto care simpler, more transparent, and more trustworthy for every American driver.");
   return (
-    <><PageMeta title="About — Car Care Ally" description="Car Care Ally is on a mission to make auto care simpler, more transparent, and more trustworthy for every American driver." />
-      <PageShell>
+    <PageShell>
       <section className="container mx-auto px-4 py-20 max-w-3xl">
         <p className="text-sm font-semibold uppercase tracking-wider text-primary">Our mission</p>
         <h1 className="mt-2 font-display text-5xl font-bold text-foreground text-balance">

@@ -1,11 +1,11 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Mail, Phone, MapPin } from "lucide-react";
-import { PageMeta } from "@/lib/page-meta";
-
 function ContactPage() {
+  useDocumentTitle("Contact — Car Care Ally", "Talk to the Car Care Ally team about partnership, support, or media inquiries.");
   const [sending, setSending] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -20,8 +20,7 @@ function ContactPage() {
   };
 
   return (
-    <><PageMeta title="Contact — Car Care Ally" description="Talk to the Car Care Ally team about partnership, support, or media inquiries." />
-      <PageShell>
+    <PageShell>
       <section className="container mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 max-w-5xl">
         <div>
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">Contact</p>

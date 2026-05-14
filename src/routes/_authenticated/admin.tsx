@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
@@ -5,16 +6,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { ShieldCheck, Store, Users, KeyRound, Settings, Plus } from "lucide-react";
-import { PageMeta } from "@/lib/page-meta";
-
 function AdminPage() {
+  useDocumentTitle("Admin — Car Care Ally");
   const { isSuperAdmin, loading } = useAuth();
   const [tab, setTab] = useState<"shops" | "users" | "settings" | "keys">("shops");
 
   if (loading) return <p className="text-muted-foreground">Loading…</p>;
   if (!isSuperAdmin) return (
-    <><PageMeta title="Admin — Car Care Ally" />
-      <div className="rounded-xl border bg-card p-10 text-center">
+    <div className="rounded-xl border bg-card p-10 text-center">
       <ShieldCheck className="h-10 w-10 mx-auto text-muted-foreground/40" />
       <p className="mt-3 font-semibold text-foreground">Restricted area</p>
       <p className="mt-1 text-sm text-muted-foreground">Super admin access required.</p>

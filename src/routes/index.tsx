@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -9,12 +10,10 @@ import {
   MapPin, ArrowRight, Star, Gauge, Bell,
 } from "lucide-react";
 import heroImg from "@/images/hero.jpg";
-import { PageMeta } from "@/lib/page-meta";
-
 function HomePage() {
+  useDocumentTitle("Car Care Ally — AI-Powered Auto Care for Every American Driver", "Diagnose your vehicle in seconds, book accredited US repair shops, and manage every car you own — all on one trusted platform.");
   return (
-    <><PageMeta title="Car Care Ally — AI-Powered Auto Care for Every American Driver" description="Diagnose your vehicle in seconds, book accredited US repair shops, and manage every car you own — all on one trusted platform." />
-      <PageShell>
+    <PageShell>
       <Hero />
       <FindByVehicle />
       <ValueProps />

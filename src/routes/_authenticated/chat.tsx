@@ -1,4 +1,4 @@
-import { PageMeta } from "@/lib/page-meta";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -8,6 +8,7 @@ import { Send, Bot, User as UserIcon, Loader2 } from "lucide-react";
 type Msg = { role: "user" | "assistant"; content: string };
 
 function ChatPage() {
+  useDocumentTitle("AI Assistant — Car Care Ally");
   const { user } = useAuth();
   const [messages, setMessages] = useState<Msg[]>([
     { role: "assistant", content: "Hi! I'm CCA Ally. Tell me what's going on with your vehicle and I'll help you figure out next steps." },
@@ -49,8 +50,7 @@ function ChatPage() {
   };
 
   return (
-    <><PageMeta title="AI Assistant — Car Care Ally" />
-      <div className="flex flex-col h-[calc(100vh-200px)]">
+    <div className="flex flex-col h-[calc(100vh-200px)]">
       <h1 className="font-display text-3xl font-bold text-foreground">CCA Ally — AI Assistant</h1>
       <p className="mt-1 text-sm text-muted-foreground">Ask anything about your vehicle, repairs, or maintenance.</p>
 

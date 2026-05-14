@@ -1,4 +1,4 @@
-import { PageMeta } from "@/lib/page-meta";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -9,6 +9,7 @@ import { Plus, Trash2, Car } from "lucide-react";
 interface V { id: string; year: number; make: string; model: string; trim: string | null; license_plate: string | null; nickname: string | null; mileage: number | null; }
 
 function VehiclesPage() {
+  useDocumentTitle("My Garage — Car Care Ally");
   const { user } = useAuth();
   const [list, setList] = useState<V[]>([]);
   const [open, setOpen] = useState(false);
@@ -41,8 +42,7 @@ function VehiclesPage() {
   };
 
   return (
-    <><PageMeta title="My Garage — Car Care Ally" />
-      <div>
+    <div>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold text-foreground">My Garage</h1>

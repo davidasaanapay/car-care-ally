@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
@@ -6,8 +7,6 @@ import { Cpu, ArrowRight, ArrowLeft, Sparkles, AlertTriangle, Check } from "luci
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { VehicleSelect, type VehicleSelection } from "@/components/VehicleSelect";
-import { PageMeta } from "@/lib/page-meta";
-
 const issueCategories = [
   { id: "engine", label: "Engine / Check Engine Light" },
   { id: "ac", label: "A/C or Heating" },
@@ -30,6 +29,7 @@ const symptomMap: Record<string, string[]> = {
 };
 
 function DiagnosticsPage() {
+  useDocumentTitle("AI Vehicle Diagnostics — Car Care Ally", "Tell us your symptoms and our AI will identify the most likely issue and price range.");
   const [step, setStep] = useState(0);
   const [vehicle, setVehicle] = useState<VehicleSelection>({ year: "", make: "", model: "" });
   const [category, setCategory] = useState<string>("");
@@ -78,8 +78,7 @@ function DiagnosticsPage() {
   };
 
   return (
-    <><PageMeta title="AI Vehicle Diagnostics — Car Care Ally" description="Tell us your symptoms and our AI will identify the most likely issue and price range." />
-      <PageShell>
+    <PageShell>
       <section className="container mx-auto px-4 py-12 max-w-3xl">
         <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-primary">
           <Cpu className="h-4 w-4" /> AI Diagnostics

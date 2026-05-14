@@ -1,9 +1,8 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-import { PageMeta } from "@/lib/page-meta";
-
 const tiers = [
   {
     name: "Driver",
@@ -56,9 +55,9 @@ const tiers = [
 ];
 
 function PricingPage() {
+  useDocumentTitle("Pricing — Car Care Ally", "Simple monthly SaaS pricing for auto-repair shops. Drivers always use Car Care Ally for free.");
   return (
-    <><PageMeta title="Pricing — Car Care Ally" description="Simple monthly SaaS pricing for auto-repair shops. Drivers always use Car Care Ally for free." />
-      <PageShell>
+    <PageShell>
       <section className="bg-subtle-gradient py-20">
         <div className="container mx-auto px-4 text-center max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">Pricing</p>

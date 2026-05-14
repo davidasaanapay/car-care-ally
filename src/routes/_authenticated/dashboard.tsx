@@ -1,10 +1,10 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Cpu, Calendar, Car, FileText, MessageSquare } from "lucide-react";
-import { PageMeta } from "@/lib/page-meta";
-
 function Dashboard() {
+  useDocumentTitle("Dashboard — Car Care Ally");
   const { user } = useAuth();
   const name = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "there";
   const tiles = [
@@ -15,8 +15,7 @@ function Dashboard() {
     { to: "/invoices", icon: FileText, title: "Invoices", desc: "Review work and pay securely." },
   ];
   return (
-    <><PageMeta title="Dashboard — Car Care Ally" />
-      <div>
+    <div>
       <h1 className="font-display text-3xl font-bold text-foreground">Welcome back, {name}.</h1>
       <p className="mt-1 text-sm text-muted-foreground">Here's everything you need to keep your vehicles in shape.</p>
       <div className="mt-8 grid sm:grid-cols-2 gap-4">

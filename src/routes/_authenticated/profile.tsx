@@ -1,11 +1,11 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { PageMeta } from "@/lib/page-meta";
-
 function ProfilePage() {
+  useDocumentTitle("Profile — Car Care Ally");
   const { user, signOut } = useAuth();
   const [profile, setProfile] = useState({ full_name: "", phone: "", state: "", city: "" });
 
@@ -25,8 +25,7 @@ function ProfilePage() {
   };
 
   return (
-    <><PageMeta title="Profile — Car Care Ally" />
-      <div>
+    <div>
       <h1 className="font-display text-3xl font-bold text-foreground">Profile</h1>
       <p className="mt-1 text-sm text-muted-foreground">{user?.email}</p>
       <form onSubmit={save} className="mt-8 rounded-xl border bg-card p-6 grid sm:grid-cols-2 gap-3 max-w-2xl">

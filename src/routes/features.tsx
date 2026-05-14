@@ -1,9 +1,8 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Cpu, Calendar, FileText, Bell, ShieldCheck, Wrench, Store, CreditCard, BarChart3, MessageSquare, Car, Map } from "lucide-react";
-import { PageMeta } from "@/lib/page-meta";
-
 const groups = [
   {
     title: "For Drivers",
@@ -35,9 +34,9 @@ const groups = [
 ];
 
 function FeaturesPage() {
+  useDocumentTitle("Platform Features — Car Care Ally", "AI diagnostics, transparent invoicing, integrated marketplace, and everything modern auto-repair shops need to grow.");
   return (
-    <><PageMeta title="Platform Features — Car Care Ally" description="AI diagnostics, transparent invoicing, integrated marketplace, and everything modern auto-repair shops need to grow." />
-      <PageShell>
+    <PageShell>
       <section className="bg-subtle-gradient py-20">
         <div className="container mx-auto px-4 text-center max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">Features</p>

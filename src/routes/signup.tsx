@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { Link, useNavigate } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
@@ -6,9 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { UserPlus } from "lucide-react";
-import { PageMeta } from "@/lib/page-meta";
-
 function SignupPage() {
+  useDocumentTitle("Create account — Car Care Ally", "Create your free Car Care Ally account.");
   const [mode, setMode] = useState<"password" | "otp">("password");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -58,8 +58,7 @@ function SignupPage() {
   };
 
   return (
-    <><PageMeta title="Create account — Car Care Ally" description="Create your free Car Care Ally account." />
-      <PageShell>
+    <PageShell>
       <section className="container mx-auto px-4 py-20 max-w-md">
         <div className="rounded-2xl border border-border bg-card p-8 shadow-card">
           <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">

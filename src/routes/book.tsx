@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
@@ -6,8 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { Calendar, CheckCircle2 } from "lucide-react";
-import { PageMeta } from "@/lib/page-meta";
-
 const TIMEZONES: { label: string; value: string }[] = [
   { label: "Eastern (EST/EDT)", value: "America/New_York" },
   { label: "Central (CST/CDT)", value: "America/Chicago" },
@@ -33,6 +32,7 @@ function formatPhone(raw: string): string {
 }
 
 function BookPage() {
+  useDocumentTitle("Book a Service — Car Care Ally", "Book an accredited US auto-repair shop. Guest checkout — no account required.");
   const { user } = useAuth();
   const [shops, setShops] = useState<any[]>([]);
   const [success, setSuccess] = useState(false);
@@ -67,7 +67,6 @@ function BookPage() {
 
   if (success) {
     return (
-      <><PageMeta title="Book a Service — Car Care Ally" description="Book an accredited US auto-repair shop. Guest checkout — no account required." />
       <PageShell>
         <section className="container mx-auto px-4 py-20 max-w-md text-center">
           <CheckCircle2 className="h-14 w-14 mx-auto text-success" />
