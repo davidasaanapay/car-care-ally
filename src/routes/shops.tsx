@@ -119,7 +119,7 @@ function ShopsPage() {
                   {(s.city || s.state || s.zip) && <div className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {[s.city, s.state, s.zip].filter(Boolean).join(", ")}</div>}
                   {s.phone && <div className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5" /> <a href={`tel:${s.phone}`} className="hover:text-primary">{s.phone}</a></div>}
                 </div>
-                <Button asChild size="sm" className="mt-5 w-full"><Link to="/book" search={{ shop: s.slug } as never}>Book at this shop</Link></Button>
+                <Button asChild size="sm" className="mt-5 w-full"><Link to={`/book?shop=${s.slug}`}>Book at this shop</Link></Button>
               </div>
             ))}
           </div>
