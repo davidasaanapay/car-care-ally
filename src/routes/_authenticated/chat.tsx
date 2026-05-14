@@ -87,7 +87,7 @@ function ChatPage() {
         </Button>
       </div>
     </div>
-    </>
+
   );
 }
 

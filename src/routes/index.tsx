@@ -251,7 +251,7 @@ function CtaBanner() {
         </div>
       </div>
     </section>
-    </>
+
   );
 }
 

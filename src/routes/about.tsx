@@ -43,7 +43,7 @@ function Pillar({ title, desc }: { title: string; desc: string }) {
       <h3 className="font-display font-semibold text-foreground">{title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
     </div>
-    </>
+
   );
 }
 

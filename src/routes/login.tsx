@@ -95,7 +95,7 @@ function LoginPage() {
         </div>
       </section>
     </PageShell>
-    </>
+
   );
 }
 

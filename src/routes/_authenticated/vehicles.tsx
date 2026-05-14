@@ -100,7 +100,7 @@ function VehiclesPage() {
         ))}
       </div>
     </div>
-    </>
+
   );
 }
 

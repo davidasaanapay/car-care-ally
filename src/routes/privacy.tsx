@@ -95,7 +95,7 @@ function PrivacyPage() {
         </div>
       </article>
     </PageShell>
-    </>
+
   );
 }
 

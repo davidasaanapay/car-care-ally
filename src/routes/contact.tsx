@@ -54,7 +54,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</span>
       <div className="mt-1.5">{children}</div>
     </label>
-    </>
+
   );
 }
 

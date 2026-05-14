@@ -100,7 +100,7 @@ function SuperAdminPage() {
         </div>
       </section>
     </PageShell>
-    </>
+
   );
 }
 

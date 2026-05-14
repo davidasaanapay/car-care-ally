@@ -87,7 +87,7 @@ function TermsPage() {
         </div>
       </article>
     </PageShell>
-    </>
+
   );
 }
 

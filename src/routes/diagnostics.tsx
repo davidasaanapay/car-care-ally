@@ -223,7 +223,7 @@ function BackRow({ onBack, onNext, disabled, nextLabel = "Continue" }: { onBack:
       <Button variant="ghost" onClick={onBack}><ArrowLeft className="mr-1 h-4 w-4" /> Back</Button>
       {onNext && <Button onClick={onNext} disabled={disabled}>{nextLabel} <ArrowRight className="ml-1 h-4 w-4" /></Button>}
     </div>
-    </>
+
   );
 }
 

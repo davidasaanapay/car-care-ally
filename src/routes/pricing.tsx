@@ -113,7 +113,7 @@ function PricingPage() {
         </p>
       </section>
     </PageShell>
-    </>
+
   );
 }
 

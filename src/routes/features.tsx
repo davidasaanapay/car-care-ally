@@ -78,7 +78,7 @@ function FeaturesPage() {
         </div>
       </section>
     </PageShell>
-    </>
+
   );
 }
 

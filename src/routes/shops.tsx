@@ -126,7 +126,7 @@ function ShopsPage() {
         )}
       </section>
     </PageShell>
-    </>
+
   );
 }
 

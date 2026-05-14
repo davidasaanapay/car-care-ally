@@ -170,7 +170,7 @@ function InvoicesList({ invoices }: any) {
         </div>
       ))}
     </div>
-    </>
+
   );
 }
 
