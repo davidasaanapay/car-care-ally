@@ -104,17 +104,55 @@ function ShopsAdmin() {
 
 function UsersAdmin() {
   const [users, setUsers] = useState<any[]>([]);
-  useEffect(() => { supabase.from("profiles").select("id,email,full_name,city,state,created_at").order("created_at", { ascending: false }).then(({ data }) => setUsers(data ?? [])); }, []);
+  const [roles, setRoles] = useState<Record<string, string[]>>({});
+
+  const load = async () => {
+    const { data: profs } = await supabase.from("profiles").select("id,email,full_name,city,state,created_at").order("created_at", { ascending: false });
+    const { data: rs } = await supabase.from("user_roles").select("user_id,role");
+    const map: Record<string, string[]> = {};
+    (rs ?? []).forEach((r: any) => { (map[r.user_id] = map[r.user_id] || []).push(r.role); });
+    setUsers(profs ?? []); setRoles(map);
+  };
+  useEffect(() => { load(); }, []);
+
+  const grant = async (userId: string, role: string) => {
+    const { error } = await supabase.from("user_roles").insert({ user_id: userId, role });
+    if (error) return toast.error(error.message);
+    toast.success(`Granted ${role}`); load();
+  };
+  const revoke = async (userId: string, role: string) => {
+    if (role === "super_admin" && !confirm("Revoke super admin?")) return;
+    const { error } = await supabase.from("user_roles").delete().eq("user_id", userId).eq("role", role);
+    if (error) return toast.error(error.message);
+    toast.success(`Revoked ${role}`); load();
+  };
+
   return (
     <div className="space-y-2">
-      {users.map((u) => (
-        <div key={u.id} className="rounded-lg border bg-card p-4 flex items-center justify-between">
-          <div>
-            <p className="font-semibold text-foreground">{u.full_name || u.email}</p>
-            <p className="text-xs text-muted-foreground">{u.email} · {[u.city, u.state].filter(Boolean).join(", ")}</p>
+      {users.map((u) => {
+        const ur = roles[u.id] || [];
+        return (
+          <div key={u.id} className="rounded-lg border bg-card p-4 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground truncate">{u.full_name || u.email}</p>
+              <p className="text-xs text-muted-foreground truncate">{u.email} · {[u.city, u.state].filter(Boolean).join(", ") || "—"}</p>
+              <div className="mt-1 flex flex-wrap gap-1">
+                {ur.length === 0 && <span className="text-xs text-muted-foreground">No roles</span>}
+                {ur.map((r) => (
+                  <span key={r} className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary inline-flex items-center gap-1">
+                    {r} <button onClick={() => revoke(u.id, r)} className="hover:text-destructive">×</button>
+                  </span>
+                ))}
+              </div>
+            </div>
+            <select onChange={(e) => { if (e.target.value) { grant(u.id, e.target.value); e.target.value = ""; } }} defaultValue=""
+              className="rounded-md border border-input bg-background px-2 py-1.5 text-xs">
+              <option value="" disabled>Grant role…</option>
+              {["customer", "shop_owner", "specialist", "super_admin"].filter((r) => !ur.includes(r)).map((r) => <option key={r} value={r}>{r}</option>)}
+            </select>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
