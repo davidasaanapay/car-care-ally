@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.fill_next_service_due() FROM PUBLIC, anon, authenticated;

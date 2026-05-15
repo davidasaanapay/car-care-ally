@@ -369,6 +369,54 @@ export type Database = {
           },
         ]
       }
+      media_uploads: {
+        Row: {
+          appointment_id: string | null
+          caption: string | null
+          captured_at: string
+          context: string
+          created_at: string
+          diagnostic_id: string | null
+          id: string
+          mime_type: string | null
+          size_bytes: number | null
+          storage_path: string
+          uploader_id: string
+          uploader_role: string
+          vehicle_id: string | null
+        }
+        Insert: {
+          appointment_id?: string | null
+          caption?: string | null
+          captured_at?: string
+          context?: string
+          created_at?: string
+          diagnostic_id?: string | null
+          id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          uploader_id: string
+          uploader_role?: string
+          vehicle_id?: string | null
+        }
+        Update: {
+          appointment_id?: string | null
+          caption?: string | null
+          captured_at?: string
+          context?: string
+          created_at?: string
+          diagnostic_id?: string | null
+          id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          uploader_id?: string
+          uploader_role?: string
+          vehicle_id?: string | null
+        }
+        Relationships: []
+      }
       platform_settings: {
         Row: {
           key: string
@@ -420,6 +468,45 @@ export type Database = {
           phone?: string | null
           state?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      service_catalog: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          default_interval_miles: number | null
+          default_interval_months: number | null
+          description: string | null
+          id: string
+          name: string
+          typical_cost_high: number | null
+          typical_cost_low: number | null
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          default_interval_miles?: number | null
+          default_interval_months?: number | null
+          description?: string | null
+          id?: string
+          name: string
+          typical_cost_high?: number | null
+          typical_cost_low?: number | null
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          default_interval_miles?: number | null
+          default_interval_months?: number | null
+          description?: string | null
+          id?: string
+          name?: string
+          typical_cost_high?: number | null
+          typical_cost_low?: number | null
         }
         Relationships: []
       }
@@ -563,6 +650,42 @@ export type Database = {
           },
         ]
       }
+      team_members: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          role: string
+          shop_id: string
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          phone?: string | null
+          role?: string
+          shop_id: string
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          role?: string
+          shop_id?: string
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -581,6 +704,54 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vehicle_services: {
+        Row: {
+          appointment_id: string | null
+          cost_usd: number | null
+          created_at: string
+          id: string
+          mileage_at_service: number | null
+          next_due_date: string | null
+          next_due_mileage: number | null
+          notes: string | null
+          owner_id: string
+          performed_on: string
+          service_code: string
+          shop_id: string | null
+          vehicle_id: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          cost_usd?: number | null
+          created_at?: string
+          id?: string
+          mileage_at_service?: number | null
+          next_due_date?: string | null
+          next_due_mileage?: number | null
+          notes?: string | null
+          owner_id: string
+          performed_on: string
+          service_code: string
+          shop_id?: string | null
+          vehicle_id: string
+        }
+        Update: {
+          appointment_id?: string | null
+          cost_usd?: number | null
+          created_at?: string
+          id?: string
+          mileage_at_service?: number | null
+          next_due_date?: string | null
+          next_due_mileage?: number | null
+          notes?: string | null
+          owner_id?: string
+          performed_on?: string
+          service_code?: string
+          shop_id?: string | null
+          vehicle_id?: string
         }
         Relationships: []
       }
