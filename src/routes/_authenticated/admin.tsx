@@ -116,13 +116,13 @@ function UsersAdmin() {
   useEffect(() => { load(); }, []);
 
   const grant = async (userId: string, role: string) => {
-    const { error } = await supabase.from("user_roles").insert({ user_id: userId, role });
+    const { error } = await supabase.from("user_roles").insert({ user_id: userId, role: role as any });
     if (error) return toast.error(error.message);
     toast.success(`Granted ${role}`); load();
   };
   const revoke = async (userId: string, role: string) => {
     if (role === "super_admin" && !confirm("Revoke super admin?")) return;
-    const { error } = await supabase.from("user_roles").delete().eq("user_id", userId).eq("role", role);
+    const { error } = await supabase.from("user_roles").delete().eq("user_id", userId).eq("role", role as any);
     if (error) return toast.error(error.message);
     toast.success(`Revoked ${role}`); load();
   };
