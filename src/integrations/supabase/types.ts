@@ -74,7 +74,21 @@ export type Database = {
             foreignKeyName: "appointments_shop_id_fkey"
             columns: ["shop_id"]
             isOneToOne: false
+            referencedRelation: "public_shops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
             referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_specialist_id_fkey"
+            columns: ["specialist_id"]
+            isOneToOne: false
+            referencedRelation: "public_specialists"
             referencedColumns: ["id"]
           },
           {
@@ -290,6 +304,13 @@ export type Database = {
             foreignKeyName: "invoices_shop_id_fkey"
             columns: ["shop_id"]
             isOneToOne: false
+            referencedRelation: "public_shops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
             referencedRelation: "shops"
             referencedColumns: ["id"]
           },
@@ -360,6 +381,13 @@ export type Database = {
           title?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "marketplace_items_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "public_shops"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "marketplace_items_shop_id_fkey"
             columns: ["shop_id"]
@@ -645,6 +673,13 @@ export type Database = {
             foreignKeyName: "specialists_shop_id_fkey"
             columns: ["shop_id"]
             isOneToOne: false
+            referencedRelation: "public_shops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "specialists_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
             referencedRelation: "shops"
             referencedColumns: ["id"]
           },
@@ -820,9 +855,142 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_shops: {
+        Row: {
+          accepts_apple_pay: boolean | null
+          accepts_cards: boolean | null
+          accepts_cashapp: boolean | null
+          accepts_google_pay: boolean | null
+          address: string | null
+          city: string | null
+          description: string | null
+          email: string | null
+          id: string | null
+          name: string | null
+          phone: string | null
+          rating: number | null
+          slug: string | null
+          state: string | null
+          status: string | null
+          website: string | null
+          zip: string | null
+        }
+        Insert: {
+          accepts_apple_pay?: boolean | null
+          accepts_cards?: boolean | null
+          accepts_cashapp?: boolean | null
+          accepts_google_pay?: boolean | null
+          address?: string | null
+          city?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string | null
+          name?: string | null
+          phone?: string | null
+          rating?: number | null
+          slug?: string | null
+          state?: string | null
+          status?: string | null
+          website?: string | null
+          zip?: string | null
+        }
+        Update: {
+          accepts_apple_pay?: boolean | null
+          accepts_cards?: boolean | null
+          accepts_cashapp?: boolean | null
+          accepts_google_pay?: boolean | null
+          address?: string | null
+          city?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string | null
+          name?: string | null
+          phone?: string | null
+          rating?: number | null
+          slug?: string | null
+          state?: string | null
+          status?: string | null
+          website?: string | null
+          zip?: string | null
+        }
+        Relationships: []
+      }
+      public_specialists: {
+        Row: {
+          bio: string | null
+          certifications: string[] | null
+          city: string | null
+          full_name: string | null
+          id: string | null
+          is_independent: boolean | null
+          shop_id: string | null
+          specialties: string[] | null
+          state: string | null
+          status: string | null
+        }
+        Insert: {
+          bio?: string | null
+          certifications?: string[] | null
+          city?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_independent?: boolean | null
+          shop_id?: string | null
+          specialties?: string[] | null
+          state?: string | null
+          status?: string | null
+        }
+        Update: {
+          bio?: string | null
+          certifications?: string[] | null
+          city?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_independent?: boolean | null
+          shop_id?: string | null
+          specialties?: string[] | null
+          state?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "specialists_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "public_shops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "specialists_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
+      claim_team_member_invite: {
+        Args: never
+        Returns: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          role: string
+          shop_id: string
+          status: string
+          user_id: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "team_members"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
