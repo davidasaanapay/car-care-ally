@@ -26,7 +26,7 @@ function LoginPage() {
   const submitPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back!");
