@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { syncUserRoles } from "@/lib/role-routing";
 
 type Role = "super_admin" | "shop_owner" | "specialist" | "customer";
 
@@ -11,6 +12,7 @@ interface AuthContextValue {
   loading: boolean;
   isSuperAdmin: boolean;
   isShopOwner: boolean;
+  isSpecialist: boolean;
   signOut: () => Promise<void>;
   refreshRoles: () => Promise<void>;
 }
@@ -23,8 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const loadRoles = async (userId: string) => {
-    const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
-    setRoles((data ?? []).map((r) => r.role as Role));
+    const data = await syncUserRoles(userId);
+    setRoles(data as Role[]);
   };
 
   useEffect(() => {
@@ -53,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     isSuperAdmin: roles.includes("super_admin"),
     isShopOwner: roles.includes("shop_owner"),
+    isSpecialist: roles.includes("specialist"),
     signOut: async () => {
       await supabase.auth.signOut();
     },

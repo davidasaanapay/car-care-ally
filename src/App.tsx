@@ -44,7 +44,7 @@ function NotFound() {
 }
 
 function AuthLayout() {
-  const { user, loading, isSuperAdmin, isShopOwner } = useAuth();
+  const { user, loading, isSuperAdmin, isShopOwner, isSpecialist } = useAuth();
   const loc = useLocation();
 
   if (loading) {
@@ -64,7 +64,7 @@ function AuthLayout() {
     { to: "/chat", label: "AI Assistant", icon: MessagesSquare },
     { to: "/profile", label: "Profile", icon: User },
   ];
-  if (isShopOwner) links.push({ to: "/shop", label: "Shop Dashboard", icon: Store });
+  if (isShopOwner || isSpecialist) links.push({ to: "/shop", label: isShopOwner ? "Shop Dashboard" : "Specialist Portal", icon: Store });
   if (isSuperAdmin) links.push({ to: "/admin", label: "Admin", icon: ShieldCheck });
 
   return (
