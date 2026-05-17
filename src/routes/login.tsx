@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Mail, KeyRound } from "lucide-react";
+import { getPostLoginRoute, syncUserRoles } from "@/lib/role-routing";
 function LoginPage() {
   useDocumentTitle("Sign In — Car Care Ally", "Sign in to your Car Care Ally account.");
   const [mode, setMode] = useState<"password" | "otp">("password");
@@ -17,6 +18,11 @@ function LoginPage() {
   const [busy, setBusy] = useState(false);
   const nav = useNavigate();
 
+  const routeAfterLogin = async (userId: string) => {
+    const roles = await syncUserRoles(userId);
+    nav(getPostLoginRoute(roles));
+  };
+
   const submitPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
@@ -24,7 +30,7 @@ function LoginPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back!");
-    nav("/dashboard");
+    if (data.user) await routeAfterLogin(data.user.id);
   };
 
   const sendCode = async (e: React.FormEvent) => {
@@ -40,11 +46,11 @@ function LoginPage() {
   const verify = async () => {
     if (otp.length !== 6) return;
     setBusy(true);
-    const { error } = await supabase.auth.verifyOtp({ email, token: otp, type: "email" });
+    const { data, error } = await supabase.auth.verifyOtp({ email, token: otp, type: "email" });
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back!");
-    nav("/dashboard");
+    if (data.user) await routeAfterLogin(data.user.id);
   };
 
   return (
