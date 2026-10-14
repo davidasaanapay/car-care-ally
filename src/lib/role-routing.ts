@@ -3,13 +3,13 @@ import { supabase } from "@/integrations/supabase/client";
 type AppRole = "super_admin" | "shop_owner" | "specialist" | "customer";
 
 export async function syncUserRoles(userId: string) {
-  await (supabase as any).rpc("claim_team_member_invite").catch(() => null);
+  try {
+    await (supabase as any).rpc("claim_team_member_invite");
+  } catch {
+    /* non-fatal */
+  }
 
-  const { data } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", userId);
-
+  const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
   return (data ?? []).map((row) => row.role as AppRole);
 }
 

@@ -25,8 +25,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const loadRoles = async (userId: string) => {
-    const data = await syncUserRoles(userId);
-    setRoles(data as Role[]);
+    try {
+      const data = await syncUserRoles(userId);
+      setRoles(data as Role[]);
+    } catch {
+      setRoles([]);
+    }
   };
 
   useEffect(() => {
@@ -41,8 +45,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      if (data.session?.user) loadRoles(data.session.user.id);
-      setLoading(false);
+      if (data.session?.user) {
+        loadRoles(data.session.user.id).finally(() => setLoading(false));
+      } else {
+        setLoading(false);
+      }
     });
 
     return () => sub.subscription.unsubscribe();
