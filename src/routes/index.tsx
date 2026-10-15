@@ -243,7 +243,7 @@ function CtaBanner() {
         </p>
         <div className="mt-8 flex flex-wrap gap-3 justify-center relative z-10">
           <Button asChild size="lg" variant="secondary" className="text-base">
-            <Link to="/signup">Create free account</Link>
+            <Link to="/signup">Create your account</Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="text-base bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground hover:text-primary">
             <Link to="/diagnostics">Try AI diagnostics</Link>
