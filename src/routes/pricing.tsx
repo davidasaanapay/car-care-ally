@@ -6,67 +6,67 @@ import { Check } from "lucide-react";
 const tiers = [
   {
     name: "Driver",
-    price: "$0",
-    period: "/forever",
-    desc: "Everything an American driver needs to keep every car healthy.",
+    price: "$29",
+    period: "/month",
+    desc: "Everything a driver needs to keep every car healthy.",
     features: [
       "Unlimited vehicles in your garage",
-      "AI diagnostics & estimates",
+      "Diagnostics & price-range estimates",
       "Find accredited shops in all 50 states",
       "Maintenance & tag-renewal reminders",
-      "AI chatbot for vehicle questions",
-      "Real-time invoices and digital receipts",
+      "Live job tracking with ETA",
+      "Full visit, invoice & payment history",
     ],
-    cta: { label: "Create free account", to: "/signup" },
+    cta: { label: "Create account", to: "/signup" },
     highlight: false,
   },
   {
-    name: "Shop · Starter",
-    price: "$49",
+    name: "Specialist · Starter",
+    price: "$99",
     period: "/month",
-    desc: "Perfect for independent shops getting started.",
+    desc: "For shops and independent specialists. No payment setup needed.",
     features: [
-      "Unlimited appointments & customers",
-      "0% platform fee on service revenue",
-      "Bring your own Stripe (Apple Pay, Google Pay, Cards, Cash App)",
-      "Marketplace storefront (small % per item sold)",
-      "Provisional → final invoice workflow",
-      "Email support",
+      "+ $9 per appointment booked, billed monthly",
+      "Customers pay you directly — keep 100%",
+      "Cash, Zelle, Cash App, Venmo, card, ACH",
+      "Live job board & customer updates",
+      "E-invoices with proof-of-payment",
+      "Tamper-proof audit trail",
     ],
-    cta: { label: "Become a partner", to: "/contact" },
+    cta: { label: "Become a partner", to: "/shop-signup" },
     highlight: true,
   },
   {
-    name: "Shop · Pro",
-    price: "$129",
+    name: "Specialist · Pro",
+    price: "$199",
     period: "/month",
-    desc: "For growing shops and multi-bay operations.",
+    desc: "Add your own parts marketplace.",
     features: [
       "Everything in Starter",
-      "Open-API parts and pricing integrations",
-      "Custom marketplace fee structure",
-      "Featured placement in shop directory",
-      "Specialist team management",
+      "+ $9 per appointment booked",
+      "Your own parts marketplace (e.g. brake pads)",
+      "Add verified parts to customer orders",
+      "Parts flow straight onto the invoice",
       "Priority support",
     ],
-    cta: { label: "Talk to sales", to: "/contact" },
+    cta: { label: "Go Pro", to: "/shop-signup" },
     highlight: false,
   },
 ];
 
 function PricingPage() {
-  useDocumentTitle("Pricing — Car Care Ally", "Simple monthly SaaS pricing for auto-repair shops. Drivers always use Car Care Ally for free.");
+  useDocumentTitle("Pricing — Car Care Ally", "Simple monthly pricing for drivers ($29) and auto specialists ($99 Starter, $199 Pro).");
   return (
     <PageShell>
       <section className="bg-subtle-gradient py-20">
         <div className="container mx-auto px-4 text-center max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">Pricing</p>
           <h1 className="mt-2 font-display text-5xl md:text-6xl font-bold text-foreground text-balance">
-            Free for drivers. Fair for shops.
+            Simple for drivers. Fair for specialists.
           </h1>
           <p className="mt-5 text-lg text-muted-foreground">
-            Shops keep 100% of service revenue. We make money from a transparent monthly subscription
-            and a small marketplace fee on parts sold.
+            Specialists keep 100% of what customers pay them. We charge a flat monthly plan plus $9 per
+            appointment booked — nothing else.
           </p>
         </div>
       </section>
@@ -109,7 +109,7 @@ function PricingPage() {
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-10 max-w-2xl mx-auto">
-          Marketplace fee, payout schedule, and subscription rate can be customized per shop by the platform admin team.
+          Appointment fees are tallied automatically and visible to both you and our support team for easy month-end reconciliation.
         </p>
       </section>
     </PageShell>
