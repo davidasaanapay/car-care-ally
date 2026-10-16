@@ -225,6 +225,7 @@ function KeysAdmin() {
           They are never sent to the browser and never stored in the database. Use the Lovable backend secrets panel to add or rotate API keys for payments, email, parts pricing, and other integrations.
         </p>
       </div>
+      <AiToggle />
       <div className="space-y-2">
         {creds.map((c) => (
           <div key={c.provider} className="rounded-lg border bg-card p-4 flex items-center justify-between">
@@ -240,6 +241,26 @@ function KeysAdmin() {
       </div>
     </div>
 
+  );
+}
+
+function AiToggle() {
+  const [on, setOn] = useState<boolean | null>(null);
+  useEffect(() => { supabase.from("platform_settings").select("value").eq("key", "ai_enabled").maybeSingle().then(({ data }) => setOn(data?.value === true)); }, []);
+  const flip = async () => {
+    const next = !on;
+    const { error } = await supabase.from("platform_settings").upsert({ key: "ai_enabled", value: next });
+    if (error) return toast.error(error.message);
+    setOn(next); toast.success(next ? "AI assistant is live" : "AI assistant set to Coming soon");
+  };
+  return (
+    <div className="rounded-lg border bg-card p-4 mb-4 flex items-center justify-between">
+      <div>
+        <p className="font-semibold text-foreground">AI chatbot & diagnostics</p>
+        <p className="text-xs text-muted-foreground">While off, customers see "Coming soon". When on, answers come from the knowledge base first and only use AI when nothing relevant is found; each AI answer is saved to the knowledge base.</p>
+      </div>
+      <Button size="sm" variant={on ? "default" : "outline"} disabled={on === null} onClick={flip}>{on ? "Live — turn off" : "Coming soon — turn on"}</Button>
+    </div>
   );
 }
 
