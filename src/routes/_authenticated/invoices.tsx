@@ -2,16 +2,28 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, ChevronDown, ChevronUp } from "lucide-react";
 import { useDocumentTitle } from "@/lib/use-document-title";
+import { useAuth } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { PaymentProofDialog } from "@/components/PaymentProofDialog";
 
 export default function InvoicesPage() {
   useDocumentTitle("Invoices — Car Care Ally");
   const [list, setList] = useState<any[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [items, setItems] = useState<Record<string, any[]>>({});
+  const { user } = useAuth();
+  const [payFor, setPayFor] = useState<any | null>(null);
+  const load = () => supabase.from("invoices").select("*").order("created_at", { ascending: false }).then(({ data }) => setList(data ?? []));
+  useEffect(() => { load(); }, []);
 
-  useEffect(() => {
-    supabase.from("invoices").select("*").order("created_at", { ascending: false }).then(({ data }) => setList(data ?? []));
-  }, []);
+  const decide = async (id: string, approve: boolean) => {
+    let reason: string | null = null;
+    if (!approve) { reason = prompt("Why are you disputing this invoice?"); if (!reason) return; }
+    const { error } = await supabase.rpc("customer_invoice_decision", { _invoice: id, _approve: approve, _reason: reason ?? "" });
+    if (error) return toast.error(error.message);
+    toast.success(approve ? "Invoice approved" : "Dispute sent to the specialist"); load();
+  };
 
   const toggle = async (id: string) => {
     if (openId === id) { setOpenId(null); return; }
@@ -65,8 +77,14 @@ export default function InvoicesPage() {
                   <div className="mt-3 pt-3 border-t border-border space-y-1 text-xs">
                     <p className="flex justify-between"><span>Subtotal</span><span>${Number(i.subtotal).toFixed(2)}</span></p>
                     <p className="flex justify-between text-muted-foreground"><span>Tax</span><span>${Number(i.tax).toFixed(2)}</span></p>
-                    <p className="flex justify-between text-muted-foreground"><span>Platform fee</span><span>${Number(i.appointment_fee).toFixed(2)}</span></p>
+                    <p className="flex justify-between text-muted-foreground"><span>Appointment fee</span><span>${Number(i.appointment_fee).toFixed(2)}</span></p>
                     <p className="flex justify-between font-bold text-foreground border-t pt-1"><span>Total</span><span>${Number(i.total).toFixed(2)}</span></p>
+                  </div>
+                  {i.payment_channel && <p className="mt-3 text-xs text-muted-foreground">Paid via {i.payment_channel} on {i.payment_date}{i.payment_reference ? ` · ref ${i.payment_reference}` : ""} · proof attached</p>}
+                  {i.status === "disputed" && <p className="mt-3 text-xs text-destructive">Your dispute: {i.dispute_reason}</p>}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {i.status === "sent" && <><Button size="sm" onClick={() => decide(i.id, true)}>Approve</Button><Button size="sm" variant="outline" onClick={() => decide(i.id, false)}>Dispute</Button></>}
+                    {i.status === "approved" && <Button size="sm" onClick={() => setPayFor(i)}>I've paid — attach proof</Button>}
                   </div>
                 </div>
               )}
@@ -74,6 +92,7 @@ export default function InvoicesPage() {
           ))}
         </div>
       )}
+      {payFor && user && <PaymentProofDialog userId={user.id} invoice={payFor} onClose={() => setPayFor(null)} onDone={() => { setPayFor(null); load(); }} />}
     </div>
   );
 }
