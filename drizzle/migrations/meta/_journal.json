@@ -8,6 +8,20 @@
       "when": 1792014603246,
       "tag": "0000_specialist_onboarding_workflow_audit",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792284539584,
+      "tag": "0001_restore_table_grants",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792284577066,
+      "tag": "0002_grant_role_helper_execute",
+      "breakpoints": true
     }
   ]
 }

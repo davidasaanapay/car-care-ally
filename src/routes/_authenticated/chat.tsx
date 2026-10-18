@@ -51,7 +51,7 @@ function ChatPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-200px)]">
-      <h1 className="font-display text-3xl font-bold text-foreground">CCA Ally — AI Assistant</h1>
+      <h1 className="font-display text-3xl font-bold text-foreground">CCA Ally — Assistant <span className="ml-2 align-middle text-xs rounded-full bg-accent/10 text-accent px-2 py-0.5">Coming soon</span></h1>
       <p className="mt-1 text-sm text-muted-foreground">Ask anything about your vehicle, repairs, or maintenance.</p>
 
       <div className="mt-6 flex-1 overflow-y-auto rounded-xl border border-border bg-card p-5 space-y-4">
