@@ -15,6 +15,13 @@
       "when": 1792284539584,
       "tag": "0001_restore_table_grants",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792284577066,
+      "tag": "0002_grant_role_helper_execute",
+      "breakpoints": true
     }
   ]
 }
