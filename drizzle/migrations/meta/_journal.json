@@ -8,6 +8,13 @@
       "when": 1792014603246,
       "tag": "0000_specialist_onboarding_workflow_audit",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792284539584,
+      "tag": "0001_restore_table_grants",
+      "breakpoints": true
     }
   ]
 }
