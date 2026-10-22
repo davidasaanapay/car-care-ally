@@ -1,17 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { PageShell } from "@/components/PageShell";
 
-export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Privacy Policy — Car Care Ally" },
-      { name: "description", content: "Car Care Ally privacy policy. CCPA / CPRA, GDPR, and US state privacy law compliant. Learn how we collect, use, and protect your information." },
-    ],
-  }),
-  component: PrivacyPage,
-});
-
 function PrivacyPage() {
+  useDocumentTitle("Privacy Policy — Car Care Ally", "Car Care Ally privacy policy. CCPA / CPRA, GDPR, and US state privacy law compliant.");
   return (
     <PageShell>
       <article className="container mx-auto px-4 py-16 max-w-3xl">
@@ -104,5 +95,8 @@ function PrivacyPage() {
         </div>
       </article>
     </PageShell>
+
   );
 }
+
+export default PrivacyPage;

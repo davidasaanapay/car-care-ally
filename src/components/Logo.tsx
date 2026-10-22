@@ -1,5 +1,5 @@
 import logo from "@/images/cca-logo.png";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 
 export function Logo({ showWordmark = true, className = "" }: { showWordmark?: boolean; className?: string }) {
   return (

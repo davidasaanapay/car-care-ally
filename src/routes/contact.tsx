@@ -1,21 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Mail, Phone, MapPin } from "lucide-react";
-
-export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — Car Care Ally" },
-      { name: "description", content: "Talk to the Car Care Ally team about partnership, support, or media inquiries." },
-    ],
-  }),
-  component: ContactPage,
-});
-
 function ContactPage() {
+  useDocumentTitle("Contact — Car Care Ally", "Talk to the Car Care Ally team about partnership, support, or media inquiries.");
   const [sending, setSending] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -64,5 +54,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</span>
       <div className="mt-1.5">{children}</div>
     </label>
+
   );
 }
+
+export default ContactPage;

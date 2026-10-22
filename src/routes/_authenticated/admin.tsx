@@ -1,19 +1,43 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { ShieldCheck, Store, Users, KeyRound, Settings, Plus } from "lucide-react";
+import { ShieldCheck, Store, Users, KeyRound, Settings, Plus, Receipt, ScrollText } from "lucide-react";
+import { BillingView, AuditView } from "./shop";
 
-export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — Car Care Ally" }, { name: "robots", content: "noindex" }] }),
-  component: AdminPage,
-});
-
+function AdminBilling() {
+  const [shops, setShops] = useState<any[]>([]);
+  const [f, setF] = useState({ shop_id: "", period: new Date().toISOString().slice(0, 7), amount_usd: "", method: "", reference: "" });
+  const [k, setK] = useState(0);
+  useEffect(() => { supabase.from("shops").select("id,name").order("name").then(({ data }) => setShops(data ?? [])); }, []);
+  const record = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { error } = await supabase.from("shop_fee_payments").insert({ ...f, amount_usd: Number(f.amount_usd) });
+    if (error) return toast.error(error.message);
+    toast.success("Payment recorded"); setF({ ...f, amount_usd: "", reference: "" }); setK(k + 1);
+  };
+  const c = "rounded-md border border-input bg-background px-3 py-2 text-sm";
+  return (
+    <div className="space-y-6">
+      <form onSubmit={record} className="rounded-xl border bg-card p-4 flex flex-wrap gap-2 items-end">
+        <select required value={f.shop_id} onChange={(e) => setF({ ...f, shop_id: e.target.value })} className={c}><option value="">Business…</option>{shops.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select>
+        <input type="month" value={f.period} onChange={(e) => setF({ ...f, period: e.target.value })} className={c} />
+        <input required type="number" step="0.01" placeholder="Amount $" value={f.amount_usd} onChange={(e) => setF({ ...f, amount_usd: e.target.value })} className={c + " w-28"} />
+        <input placeholder="Method" value={f.method} onChange={(e) => setF({ ...f, method: e.target.value })} className={c + " w-28"} />
+        <input placeholder="Reference" value={f.reference} onChange={(e) => setF({ ...f, reference: e.target.value })} className={c} />
+        <Button size="sm">Record fee payment</Button>
+      </form>
+      <BillingView key={k} />
+    </div>
+  );
+}
 function AdminPage() {
+  useDocumentTitle("Admin — Car Care Ally");
   const { isSuperAdmin, loading } = useAuth();
-  const [tab, setTab] = useState<"shops" | "users" | "settings" | "keys">("shops");
+  const [tab, setTab] = useState<string>("shops");
 
   if (loading) return <p className="text-muted-foreground">Loading…</p>;
   if (!isSuperAdmin) return (
@@ -27,6 +51,8 @@ function AdminPage() {
   const tabs = [
     { id: "shops", label: "Shops & Specialists", icon: Store },
     { id: "users", label: "Users", icon: Users },
+    { id: "billing", label: "Fees & reconciliation", icon: Receipt },
+    { id: "audit", label: "Audit log", icon: ScrollText },
     { id: "settings", label: "Platform Settings", icon: Settings },
     { id: "keys", label: "API Keys & Integrations", icon: KeyRound },
   ] as const;
@@ -48,6 +74,8 @@ function AdminPage() {
       <div className="mt-6">
         {tab === "shops" && <ShopsAdmin />}
         {tab === "users" && <UsersAdmin />}
+        {tab === "billing" && <AdminBilling />}
+        {tab === "audit" && <AuditView />}
         {tab === "settings" && <SettingsAdmin />}
         {tab === "keys" && <KeysAdmin />}
       </div>
@@ -108,17 +136,55 @@ function ShopsAdmin() {
 
 function UsersAdmin() {
   const [users, setUsers] = useState<any[]>([]);
-  useEffect(() => { supabase.from("profiles").select("id,email,full_name,city,state,created_at").order("created_at", { ascending: false }).then(({ data }) => setUsers(data ?? [])); }, []);
+  const [roles, setRoles] = useState<Record<string, string[]>>({});
+
+  const load = async () => {
+    const { data: profs } = await supabase.from("profiles").select("id,email,full_name,city,state,created_at").order("created_at", { ascending: false });
+    const { data: rs } = await supabase.from("user_roles").select("user_id,role");
+    const map: Record<string, string[]> = {};
+    (rs ?? []).forEach((r: any) => { (map[r.user_id] = map[r.user_id] || []).push(r.role); });
+    setUsers(profs ?? []); setRoles(map);
+  };
+  useEffect(() => { load(); }, []);
+
+  const grant = async (userId: string, role: string) => {
+    const { error } = await supabase.from("user_roles").insert({ user_id: userId, role: role as any });
+    if (error) return toast.error(error.message);
+    toast.success(`Granted ${role}`); load();
+  };
+  const revoke = async (userId: string, role: string) => {
+    if (role === "super_admin" && !confirm("Revoke super admin?")) return;
+    const { error } = await supabase.from("user_roles").delete().eq("user_id", userId).eq("role", role as any);
+    if (error) return toast.error(error.message);
+    toast.success(`Revoked ${role}`); load();
+  };
+
   return (
     <div className="space-y-2">
-      {users.map((u) => (
-        <div key={u.id} className="rounded-lg border bg-card p-4 flex items-center justify-between">
-          <div>
-            <p className="font-semibold text-foreground">{u.full_name || u.email}</p>
-            <p className="text-xs text-muted-foreground">{u.email} · {[u.city, u.state].filter(Boolean).join(", ")}</p>
+      {users.map((u) => {
+        const ur = roles[u.id] || [];
+        return (
+          <div key={u.id} className="rounded-lg border bg-card p-4 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground truncate">{u.full_name || u.email}</p>
+              <p className="text-xs text-muted-foreground truncate">{u.email} · {[u.city, u.state].filter(Boolean).join(", ") || "—"}</p>
+              <div className="mt-1 flex flex-wrap gap-1">
+                {ur.length === 0 && <span className="text-xs text-muted-foreground">No roles</span>}
+                {ur.map((r) => (
+                  <span key={r} className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary inline-flex items-center gap-1">
+                    {r} <button onClick={() => revoke(u.id, r)} className="hover:text-destructive">×</button>
+                  </span>
+                ))}
+              </div>
+            </div>
+            <select onChange={(e) => { if (e.target.value) { grant(u.id, e.target.value); e.target.value = ""; } }} defaultValue=""
+              className="rounded-md border border-input bg-background px-2 py-1.5 text-xs">
+              <option value="" disabled>Grant role…</option>
+              {["customer", "shop_owner", "specialist", "super_admin"].filter((r) => !ur.includes(r)).map((r) => <option key={r} value={r}>{r}</option>)}
+            </select>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -159,6 +225,7 @@ function KeysAdmin() {
           They are never sent to the browser and never stored in the database. Use the Lovable backend secrets panel to add or rotate API keys for payments, email, parts pricing, and other integrations.
         </p>
       </div>
+      <AiToggle />
       <div className="space-y-2">
         {creds.map((c) => (
           <div key={c.provider} className="rounded-lg border bg-card p-4 flex items-center justify-between">
@@ -173,5 +240,28 @@ function KeysAdmin() {
         ))}
       </div>
     </div>
+
   );
 }
+
+function AiToggle() {
+  const [on, setOn] = useState<boolean | null>(null);
+  useEffect(() => { supabase.from("platform_settings").select("value").eq("key", "ai_enabled").maybeSingle().then(({ data }) => setOn(data?.value === true)); }, []);
+  const flip = async () => {
+    const next = !on;
+    const { error } = await supabase.from("platform_settings").upsert({ key: "ai_enabled", value: next });
+    if (error) return toast.error(error.message);
+    setOn(next); toast.success(next ? "AI assistant is live" : "AI assistant set to Coming soon");
+  };
+  return (
+    <div className="rounded-lg border bg-card p-4 mb-4 flex items-center justify-between">
+      <div>
+        <p className="font-semibold text-foreground">AI chatbot & diagnostics</p>
+        <p className="text-xs text-muted-foreground">While off, customers see "Coming soon". When on, answers come from the knowledge base first and only use AI when nothing relevant is found; each AI answer is saved to the knowledge base.</p>
+      </div>
+      <Button size="sm" variant={on ? "default" : "outline"} disabled={on === null} onClick={flip}>{on ? "Live — turn off" : "Coming soon — turn on"}</Button>
+    </div>
+  );
+}
+
+export default AdminPage;

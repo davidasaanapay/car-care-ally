@@ -1,16 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-
-export const Route = createFileRoute("/_authenticated/profile")({
-  head: () => ({ meta: [{ title: "Profile — Car Care Ally" }] }),
-  component: ProfilePage,
-});
-
 function ProfilePage() {
+  useDocumentTitle("Profile — Car Care Ally");
   const { user, signOut } = useAuth();
   const [profile, setProfile] = useState({ full_name: "", phone: "", state: "", city: "" });
 
@@ -47,5 +42,8 @@ function ProfilePage() {
         </div>
       </form>
     </div>
+
   );
 }
+
+export default ProfilePage;

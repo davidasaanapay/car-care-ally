@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -6,17 +7,8 @@ import { Cpu, ArrowRight, ArrowLeft, Sparkles, AlertTriangle, Check } from "luci
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { VehicleSelect, type VehicleSelection } from "@/components/VehicleSelect";
-
-export const Route = createFileRoute("/diagnostics")({
-  head: () => ({
-    meta: [
-      { title: "AI Vehicle Diagnostics — Car Care Ally" },
-      { name: "description", content: "Tell us your symptoms and our AI will identify the most likely issue and price range." },
-    ],
-  }),
-  component: DiagnosticsPage,
-});
-
+import { MediaUploader } from "@/components/MediaUploader";
+import { useAuth } from "@/lib/auth";
 const issueCategories = [
   { id: "engine", label: "Engine / Check Engine Light" },
   { id: "ac", label: "A/C or Heating" },
@@ -39,6 +31,8 @@ const symptomMap: Record<string, string[]> = {
 };
 
 function DiagnosticsPage() {
+  useDocumentTitle("AI Vehicle Diagnostics — Car Care Ally", "Tell us your symptoms and our AI will identify the most likely issue and price range.");
+  const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [vehicle, setVehicle] = useState<VehicleSelection>({ year: "", make: "", model: "" });
   const [category, setCategory] = useState<string>("");
@@ -170,6 +164,18 @@ function DiagnosticsPage() {
                   <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={6} placeholder="When does it happen? Any sounds, smells, or warning lights?"
                     className="mt-1 w-full min-h-[140px] rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-y" />
                 </label>
+                {user && (
+                  <div className="rounded-lg border border-dashed border-border p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Photos, video, or engine sound (optional)</p>
+                    <p className="text-xs text-muted-foreground mb-3">Snap a photo of a warning light, record the sound your engine makes, or upload a short video. Helps the AI and the specialist diagnose faster.</p>
+                    <MediaUploader uploaderId={user.id} uploaderRole="customer" context="diagnostics" />
+                  </div>
+                )}
+                {!user && (
+                  <p className="text-xs text-muted-foreground rounded-lg bg-secondary p-3">
+                    <Link to="/signup" className="text-primary font-medium">Create a free account</Link> to attach photos, videos, or an audio recording of your engine.
+                  </p>
+                )}
               </div>
               <BackRow onBack={() => setStep(hasSymptomList ? 2 : 1)} onNext={runAI} nextLabel={loading ? "Analyzing…" : "Run AI assessment"} disabled={loading} />
             </div>
@@ -232,5 +238,8 @@ function BackRow({ onBack, onNext, disabled, nextLabel = "Continue" }: { onBack:
       <Button variant="ghost" onClick={onBack}><ArrowLeft className="mr-1 h-4 w-4" /> Back</Button>
       {onNext && <Button onClick={onNext} disabled={disabled}>{nextLabel} <ArrowRight className="ml-1 h-4 w-4" /></Button>}
     </div>
+
   );
 }
+
+export default DiagnosticsPage;

@@ -1,18 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Send, Bot, User as UserIcon, Loader2 } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/chat")({
-  head: () => ({ meta: [{ title: "AI Assistant — Car Care Ally" }] }),
-  component: ChatPage,
-});
-
 type Msg = { role: "user" | "assistant"; content: string };
 
 function ChatPage() {
+  useDocumentTitle("AI Assistant — Car Care Ally");
   const { user } = useAuth();
   const [messages, setMessages] = useState<Msg[]>([
     { role: "assistant", content: "Hi! I'm CCA Ally. Tell me what's going on with your vehicle and I'll help you figure out next steps." },
@@ -55,7 +51,7 @@ function ChatPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-200px)]">
-      <h1 className="font-display text-3xl font-bold text-foreground">CCA Ally — AI Assistant</h1>
+      <h1 className="font-display text-3xl font-bold text-foreground">CCA Ally — Assistant <span className="ml-2 align-middle text-xs rounded-full bg-accent/10 text-accent px-2 py-0.5">Coming soon</span></h1>
       <p className="mt-1 text-sm text-muted-foreground">Ask anything about your vehicle, repairs, or maintenance.</p>
 
       <div className="mt-6 flex-1 overflow-y-auto rounded-xl border border-border bg-card p-5 space-y-4">
@@ -91,5 +87,8 @@ function ChatPage() {
         </Button>
       </div>
     </div>
+
   );
 }
+
+export default ChatPage;

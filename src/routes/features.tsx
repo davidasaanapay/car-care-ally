@@ -1,20 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useDocumentTitle } from "@/lib/use-document-title";
+import { Link } from "react-router-dom";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Cpu, Calendar, FileText, Bell, ShieldCheck, Wrench, Store, CreditCard, BarChart3, MessageSquare, Car, Map } from "lucide-react";
-
-export const Route = createFileRoute("/features")({
-  head: () => ({
-    meta: [
-      { title: "Platform Features — Car Care Ally" },
-      { name: "description", content: "AI diagnostics, transparent invoicing, integrated marketplace, and everything modern auto-repair shops need to grow." },
-      { property: "og:title", content: "Platform Features — Car Care Ally" },
-      { property: "og:description", content: "Everything modern auto-repair shops and drivers need on one platform." },
-    ],
-  }),
-  component: FeaturesPage,
-});
-
 const groups = [
   {
     title: "For Drivers",
@@ -46,6 +34,7 @@ const groups = [
 ];
 
 function FeaturesPage() {
+  useDocumentTitle("Platform Features — Car Care Ally", "AI diagnostics, transparent invoicing, integrated marketplace, and everything modern auto-repair shops need to grow.");
   return (
     <PageShell>
       <section className="bg-subtle-gradient py-20">
@@ -89,5 +78,8 @@ function FeaturesPage() {
         </div>
       </section>
     </PageShell>
+
   );
 }
+
+export default FeaturesPage;
